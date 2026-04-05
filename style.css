@@ -771,7 +771,7 @@
 
 .app-badge img.badge-gplay {
   width: 418px;
-  height: 163px;
+  height: 155px;
   object-fit: contain;
   object-position: center;
 }
@@ -807,7 +807,7 @@
   }
   .app-badge img.badge-gplay {
     width: 360px;
-    height: 139px;
+    height: 131px;
   }
 }
 
