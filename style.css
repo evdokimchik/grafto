@@ -770,8 +770,10 @@
 }
 
 .app-badge img[src$=".svg"] {
-  width: 210px;
+  width: 209px;
   height: 84px;
+  object-fit: contain;
+  object-position: center;
 }
 
 /* Dark-mode icon swap: hide inverted by default, show in dark theme */
