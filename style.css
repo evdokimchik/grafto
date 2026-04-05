@@ -765,13 +765,13 @@
 }
 
 .app-badge img {
-  height: 84px;
+  height: 168px;
   width: auto;
 }
 
 .app-badge img[src$=".svg"] {
-  width: 209px;
-  height: 84px;
+  width: 418px;
+  height: 168px;
   object-fit: contain;
   object-position: center;
 }
@@ -803,11 +803,11 @@
     gap: var(--space-4);
   }
   .app-badge img {
-    height: 72px;
+    height: 144px;
   }
   .app-badge img[src$=".svg"] {
-    width: 180px;
-    height: 72px;
+    width: 360px;
+    height: 144px;
   }
 }
 
