@@ -746,7 +746,7 @@
 .app-badges__row {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-6);
   flex-wrap: wrap;
 }
@@ -770,8 +770,8 @@
 }
 
 .app-badge img.badge-gplay {
-  height: 123px;
-  width: auto;
+  height: auto;
+  width: 395px;
 }
 
 /* Dark-mode icon swap: hide inverted by default, show in dark theme */
@@ -804,8 +804,8 @@
     height: 144px;
   }
   .app-badge img.badge-gplay {
-    height: 106px;
-    width: auto;
+    height: auto;
+    width: 340px;
   }
 }
 
