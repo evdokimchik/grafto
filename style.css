@@ -765,8 +765,9 @@
 }
 
 .app-badge img {
-  height: 112px;
+  height: 84px;
   width: auto;
+  max-width: 220px;
 }
 
 /* Dark-mode icon swap: hide inverted by default, show in dark theme */
@@ -796,7 +797,7 @@
     gap: var(--space-4);
   }
   .app-badge img {
-    height: 96px;
+    height: 72px;
   }
 }
 
