@@ -769,11 +769,8 @@
   width: auto;
 }
 
-.app-badge img[src$=".svg"] {
-  width: 418px;
-  height: 168px;
-  object-fit: contain;
-  object-position: center;
+.app-badge img.badge-gplay {
+  height: 163px;
 }
 
 /* Dark-mode icon swap: hide inverted by default, show in dark theme */
@@ -805,9 +802,8 @@
   .app-badge img {
     height: 144px;
   }
-  .app-badge img[src$=".svg"] {
-    width: 360px;
-    height: 144px;
+  .app-badge img.badge-gplay {
+    height: 139px;
   }
 }
 
