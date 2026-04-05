@@ -771,7 +771,7 @@
 
 .app-badge img.badge-gplay {
   height: auto;
-  width: 395px;
+  width: 350px;
 }
 
 /* Dark-mode icon swap: hide inverted by default, show in dark theme */
@@ -805,7 +805,7 @@
   }
   .app-badge img.badge-gplay {
     height: auto;
-    width: 340px;
+    width: 300px;
   }
 }
 
