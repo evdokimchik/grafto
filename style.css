@@ -765,8 +765,19 @@
 }
 
 .app-badge img {
-  height: 56px;
+  height: 112px;
   width: auto;
+}
+
+/* Dark-mode icon swap: hide inverted by default, show in dark theme */
+.app-badge img.badge-dark {
+  display: none;
+}
+[data-theme="dark"] .app-badge img.badge-light {
+  display: none;
+}
+[data-theme="dark"] .app-badge img.badge-dark {
+  display: inline;
 }
 
 .app-badge--coming {
@@ -785,7 +796,7 @@
     gap: var(--space-4);
   }
   .app-badge img {
-    height: 48px;
+    height: 96px;
   }
 }
 
