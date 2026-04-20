@@ -1,3 +1,12 @@
 User-agent: *
 Allow: /
+
+User-agent: Yandex
+Allow: /
+Clean-param: t&lang
+
+User-agent: Googlebot
+Allow: /
+
 Sitemap: https://start.grafto.hair/sitemap.xml
+Host: start.grafto.hair
