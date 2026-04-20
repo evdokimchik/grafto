@@ -401,6 +401,40 @@
   gap: var(--space-6);
 }
 
+/* Hidden cards shown after «All articles» click */
+.article-card[data-extra] { display: none; }
+.articles-grid.show-all .article-card[data-extra] { display: block; }
+
+/* «All articles» button row */
+.articles-more {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-8);
+}
+.articles-grid.show-all + .articles-more { display: none; }
+
+/* Article CTA (App Store) block */
+.article-cta {
+  margin-top: var(--space-8);
+  padding: var(--space-6);
+  background: var(--color-primary-light);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+.article-cta p {
+  margin-bottom: var(--space-4);
+  line-height: 1.6;
+}
+.article-cta a.article-cta__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+.article-cta a.article-cta__link:hover { text-decoration: underline; }
+
 .article-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
