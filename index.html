@@ -1059,50 +1059,162 @@
   </div>
 </section>
 
-<!-- NORWOOD SCALE VISUAL -->
+<!-- NORWOOD SCALE VISUAL + INTERACTIVE ASSESSMENT -->
 <section class="section section--alt" id="norwood">
   <div class="container">
     <div class="section__header" data-reveal>
       <h2 class="section__title" data-lang="en">Norwood Scale at a Glance</h2>
       <h2 class="section__title" data-lang="ru" style="display:none">Шкала Норвуда</h2>
-      <p class="section__subtitle" data-lang="en">Identify your stage to choose the right treatment path.</p>
-      <p class="section__subtitle" data-lang="ru" style="display:none">Определите свою стадию для выбора подходящего лечения.</p>
+      <p class="section__subtitle" data-lang="en">Pick the picture that looks closest to you, get a graft-range estimate, and we'll email it to you.</p>
+      <p class="section__subtitle" data-lang="ru" style="display:none">Выберите изображение, которое ближе всего к вам — получите ориентировочный диапазон графтов на email.</p>
     </div>
-    <div class="norwood-grid" data-reveal>
-      <div class="norwood-card">
-        <div class="norwood-card__stage">I</div>
-        <div class="norwood-card__label" data-lang="en">No significant loss</div>
-        <div class="norwood-card__label" data-lang="ru" style="display:none">Без выпадения</div>
+
+    <div class="norwood-tool" data-reveal>
+      <ol class="norwood-steps" aria-hidden="true">
+        <li class="norwood-step is-active" data-step-marker="1"><span>1</span><em data-lang="en">Pick a stage</em><em data-lang="ru" style="display:none">Выберите стадию</em></li>
+        <li class="norwood-step" data-step-marker="2"><span>2</span><em data-lang="en">Enter email</em><em data-lang="ru" style="display:none">Введите email</em></li>
+        <li class="norwood-step" data-step-marker="3"><span>3</span><em data-lang="en">Get your range</em><em data-lang="ru" style="display:none">Получите диапазон</em></li>
+      </ol>
+
+      <!-- STEP 1: Stage selection -->
+      <div class="norwood-panel norwood-panel--stages is-active" data-step="stages">
+        <div class="norwood-grid" role="radiogroup" aria-label="Norwood stage">
+          <!-- Stage cards generated identically for EN/RU; only labels swap via data-lang -->
+          <button type="button" class="norwood-card" role="radio" aria-checked="false" data-stage="1">
+            <div class="norwood-card__media"><img src="./norwood/stage-1.jpg" alt="Norwood stage 1 illustration" loading="lazy" width="240" height="212"></div>
+            <div class="norwood-card__stage">I</div>
+            <div class="norwood-card__label" data-lang="en">No visible recession</div>
+            <div class="norwood-card__label" data-lang="ru" style="display:none">Без выпадения</div>
+          </button>
+          <button type="button" class="norwood-card" role="radio" aria-checked="false" data-stage="2">
+            <div class="norwood-card__media"><img src="./norwood/stage-2.jpg" alt="Norwood stage 2 illustration" loading="lazy" width="240" height="212"></div>
+            <div class="norwood-card__stage">II</div>
+            <div class="norwood-card__label" data-lang="en">Early temple recession</div>
+            <div class="norwood-card__label" data-lang="ru" style="display:none">Лёгкое отступление на висках</div>
+          </button>
+          <button type="button" class="norwood-card" role="radio" aria-checked="false" data-stage="3">
+            <div class="norwood-card__media"><img src="./norwood/stage-3.jpg" alt="Norwood stage 3 illustration" loading="lazy" width="240" height="212"></div>
+            <div class="norwood-card__stage">III</div>
+            <div class="norwood-card__label" data-lang="en">Defined M-shaped recession</div>
+            <div class="norwood-card__label" data-lang="ru" style="display:none">Глубокое М-образное отступление</div>
+          </button>
+          <button type="button" class="norwood-card" role="radio" aria-checked="false" data-stage="4">
+            <div class="norwood-card__media"><img src="./norwood/stage-4.jpg" alt="Norwood stage 4 illustration" loading="lazy" width="240" height="212"></div>
+            <div class="norwood-card__stage">IV</div>
+            <div class="norwood-card__label" data-lang="en">Front + crown involvement</div>
+            <div class="norwood-card__label" data-lang="ru" style="display:none">Поредение спереди и на макушке</div>
+          </button>
+          <button type="button" class="norwood-card" role="radio" aria-checked="false" data-stage="5">
+            <div class="norwood-card__media"><img src="./norwood/stage-5.jpg" alt="Norwood stage 5 illustration" loading="lazy" width="240" height="212"></div>
+            <div class="norwood-card__stage">V</div>
+            <div class="norwood-card__label" data-lang="en">Areas begin to merge</div>
+            <div class="norwood-card__label" data-lang="ru" style="display:none">Зоны начинают сливаться</div>
+          </button>
+          <button type="button" class="norwood-card" role="radio" aria-checked="false" data-stage="6">
+            <div class="norwood-card__media"><img src="./norwood/stage-6.jpg" alt="Norwood stage 6 illustration" loading="lazy" width="240" height="212"></div>
+            <div class="norwood-card__stage">VI</div>
+            <div class="norwood-card__label" data-lang="en">Extensive top/crown loss</div>
+            <div class="norwood-card__label" data-lang="ru" style="display:none">Обширная зона облысения</div>
+          </button>
+          <button type="button" class="norwood-card" role="radio" aria-checked="false" data-stage="7">
+            <div class="norwood-card__media"><img src="./norwood/stage-7.jpg" alt="Norwood stage 7 illustration" loading="lazy" width="240" height="212"></div>
+            <div class="norwood-card__stage">VII</div>
+            <div class="norwood-card__label" data-lang="en">Only sides &amp; back remain</div>
+            <div class="norwood-card__label" data-lang="ru" style="display:none">Остаются только бока и затылок</div>
+          </button>
+        </div>
+        <div class="norwood-actions">
+          <button type="button" class="btn btn--primary" id="norwood-to-email" disabled>
+            <span data-lang="en">Continue</span>
+            <span data-lang="ru" style="display:none">Продолжить</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </button>
+          <p class="norwood-hint" data-lang="en">Tip: choose the closest match — your selection isn't a diagnosis.</p>
+          <p class="norwood-hint" data-lang="ru" style="display:none">Подсказка: выберите ближайший вариант — это не диагноз, а ориентир.</p>
+        </div>
       </div>
-      <div class="norwood-card">
-        <div class="norwood-card__stage">II</div>
-        <div class="norwood-card__label" data-lang="en">Slight temple recession</div>
-        <div class="norwood-card__label" data-lang="ru" style="display:none">Лёгкое отступление на висках</div>
+
+      <!-- STEP 2: Email -->
+      <div class="norwood-panel norwood-panel--email" data-step="email" hidden>
+        <div class="norwood-summary" aria-live="polite">
+          <div class="norwood-summary__thumb"><img id="norwood-summary-img" src="" alt=""></div>
+          <div class="norwood-summary__body">
+            <div class="norwood-summary__eyebrow" data-lang="en">Your selection</div>
+            <div class="norwood-summary__eyebrow" data-lang="ru" style="display:none">Ваш выбор</div>
+            <div class="norwood-summary__title" id="norwood-summary-title"></div>
+            <button type="button" class="norwood-link" id="norwood-change">
+              <span data-lang="en">Change</span>
+              <span data-lang="ru" style="display:none">Изменить</span>
+            </button>
+          </div>
+        </div>
+
+        <form class="norwood-form" id="norwood-form" novalidate>
+          <label class="form-label" for="norwood-email">
+            <span data-lang="en">Email — we'll send your range and next steps</span>
+            <span data-lang="ru" style="display:none">Email — пришлём ваш диапазон и следующие шаги</span>
+          </label>
+          <div class="norwood-form__row">
+            <input class="form-input" type="email" id="norwood-email" name="email" required autocomplete="email" inputmode="email"
+                   placeholder="you@example.com" aria-describedby="norwood-error">
+            <button type="submit" class="btn btn--primary" id="norwood-submit">
+              <span class="norwood-btn-label" data-lang="en">Get my estimate</span>
+              <span class="norwood-btn-label" data-lang="ru" style="display:none">Получить расчёт</span>
+              <span class="norwood-btn-spinner" aria-hidden="true"></span>
+            </button>
+          </div>
+          <p class="norwood-error" id="norwood-error" role="alert"></p>
+          <p class="norwood-consent" data-lang="en">By continuing you agree to receive a one-time email with your estimate. We respect your privacy — see our <a href="https://grafto.hair/privacy_policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</p>
+          <p class="norwood-consent" data-lang="ru" style="display:none">Продолжая, вы соглашаетесь получить единоразовое письмо с вашим расчётом. Мы уважаем вашу приватность — см. <a href="https://grafto.hair/privacy_policy" target="_blank" rel="noopener noreferrer">Политику конфиденциальности</a>.</p>
+        </form>
       </div>
-      <div class="norwood-card">
-        <div class="norwood-card__stage">III</div>
-        <div class="norwood-card__label" data-lang="en">Deeper M-shaped recession</div>
-        <div class="norwood-card__label" data-lang="ru" style="display:none">Глубокое М-образное отступление</div>
-      </div>
-      <div class="norwood-card">
-        <div class="norwood-card__stage">IV</div>
-        <div class="norwood-card__label" data-lang="en">Front + crown thinning</div>
-        <div class="norwood-card__label" data-lang="ru" style="display:none">Поредение спереди и на макушке</div>
-      </div>
-      <div class="norwood-card">
-        <div class="norwood-card__stage">V</div>
-        <div class="norwood-card__label" data-lang="en">Areas begin to merge</div>
-        <div class="norwood-card__label" data-lang="ru" style="display:none">Зоны начинают сливаться</div>
-      </div>
-      <div class="norwood-card">
-        <div class="norwood-card__stage">VI</div>
-        <div class="norwood-card__label" data-lang="en">Large bald area</div>
-        <div class="norwood-card__label" data-lang="ru" style="display:none">Обширная зона облысения</div>
-      </div>
-      <div class="norwood-card">
-        <div class="norwood-card__stage">VII</div>
-        <div class="norwood-card__label" data-lang="en">Only sides &amp; back remain</div>
-        <div class="norwood-card__label" data-lang="ru" style="display:none">Остаются только бока и затылок</div>
+
+      <!-- STEP 3: Result -->
+      <div class="norwood-panel norwood-panel--result" data-step="result" hidden>
+        <div class="norwood-result">
+          <div class="norwood-result__head">
+            <div class="norwood-result__thumb"><img id="norwood-result-img" src="" alt=""></div>
+            <div>
+              <div class="norwood-result__eyebrow" data-lang="en">Your estimate</div>
+              <div class="norwood-result__eyebrow" data-lang="ru" style="display:none">Ваш расчёт</div>
+              <h3 class="norwood-result__title" id="norwood-result-title"></h3>
+            </div>
+          </div>
+          <dl class="norwood-result__grid">
+            <div class="norwood-result__row">
+              <dt data-lang="en">Pattern</dt>
+              <dt data-lang="ru" style="display:none">Стадия</dt>
+              <dd id="norwood-result-pattern"></dd>
+            </div>
+            <div class="norwood-result__row">
+              <dt data-lang="en">Graft estimate</dt>
+              <dt data-lang="ru" style="display:none">Оценка графтов</dt>
+              <dd id="norwood-result-grafts"></dd>
+            </div>
+            <div class="norwood-result__row">
+              <dt data-lang="en">Best next step</dt>
+              <dt data-lang="ru" style="display:none">Следующий шаг</dt>
+              <dd id="norwood-result-next"></dd>
+            </div>
+          </dl>
+          <p class="norwood-result__email" id="norwood-result-email"></p>
+          <p class="norwood-result__disclaimer" data-lang="en">Not medical advice. Final planning depends on donor assessment, scalp characteristics, and surgeon evaluation.</p>
+          <p class="norwood-result__disclaimer" data-lang="ru" style="display:none">Это не медицинская рекомендация. Окончательный план зависит от оценки донорской зоны, состояния кожи головы и заключения хирурга.</p>
+
+          <div class="norwood-cta">
+            <p class="norwood-cta__text" data-lang="en">Get a detailed photo-based breakdown — costs in different countries for hair transplant and SMP, and personalized recommendations — in the Grafto app.</p>
+            <p class="norwood-cta__text" data-lang="ru" style="display:none">Получите детальный разбор по фото — стоимость пересадки и SMP в разных странах и персональные рекомендации — в приложении Grafto.</p>
+            <a href="https://apps.apple.com/app/grafto-hair-transplant-smp/id6759666757" target="_blank" rel="noopener noreferrer" class="btn btn--primary norwood-cta__btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 1c-1.4.1-3 .9-4 2-1 1-1.7 2.5-1.5 4 1.5 0 3-.8 4-1.9 1-1 1.7-2.5 1.5-4.1zM20 17.4c-.6 1.3-.9 1.9-1.6 3-1 1.6-2.5 3.6-4.4 3.6-1.6 0-2-1.1-4.2-1.1s-2.7 1.1-4.3 1.1c-1.9 0-3.3-1.8-4.3-3.4-2.8-4.5-3.1-9.7-1.4-12.5 1.2-2 3.1-3.2 4.9-3.2 1.8 0 3 1 4.5 1 1.5 0 2.4-1 4.5-1 1.6 0 3.3.9 4.5 2.4-3.9 2.2-3.3 7.9 1.8 10.1z"/></svg>
+              <span data-lang="en">Download on the App Store</span>
+              <span data-lang="ru" style="display:none">Скачать в App Store</span>
+            </a>
+            <button type="button" class="btn btn--ghost" id="norwood-restart">
+              <span data-lang="en">Start over</span>
+              <span data-lang="ru" style="display:none">Начать заново</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1518,6 +1630,269 @@ App Store app: "Grafto: Hair Transplant & SMP" — https://apps.apple.com/app/gr
 Приложение в App Store: "Grafto: Hair Transplant & SMP" — https://apps.apple.com/app/grafto-hair-transplant-smp/id6759666757
 `;
   }
+
+  // === NORWOOD INTERACTIVE ASSESSMENT ===
+  // Endpoint that proxies to Loops (keeps API key server-side). Configure at deploy time.
+  // Example payload sent: { email, stage, language, pattern, grafts, nextStep, source: 'landing-norwood' }
+  // The endpoint should: (1) update/create the contact in Loops, (2) send a transactional email
+  // using a template ID stored in env (e.g. LOOPS_TRANSACTIONAL_ID). Until configured, the form
+  // shows a graceful fallback so the result still appears (email delivery is just skipped).
+  const NORWOOD_ENDPOINT = (typeof window !== 'undefined' && window.GRAFTO_NORWOOD_ENDPOINT) || '';
+
+  const NORWOOD_DATA = {
+    1: {
+      en: { pattern: 'Likely Norwood 1 — minimal/no visible recession.',
+            grafts: 'Typical planning range: 0 grafts; no transplant planning usually needed.',
+            next: 'Monitor your hairline and compare photos over time.' },
+      ru: { pattern: 'Вероятно, Норвуд 1 — выпадение незаметно или отсутствует.',
+            grafts: 'Ориентировочный диапазон: 0 графтов; пересадка обычно не требуется.',
+            next: 'Наблюдайте за линией роста и сравнивайте фотографии со временем.' }
+    },
+    2: {
+      en: { pattern: 'Likely Norwood 2 — early temple recession.',
+            grafts: 'Typical planning range: 800–1,500 grafts.',
+            next: 'Confirm stability before considering hairline work.' },
+      ru: { pattern: 'Вероятно, Норвуд 2 — лёгкое отступление на висках.',
+            grafts: 'Ориентировочный диапазон: 800–1 500 графтов.',
+            next: 'Убедитесь в стабильности процесса, прежде чем планировать вмешательство.' }
+    },
+    3: {
+      en: { pattern: 'Likely Norwood 3 — defined frontal/temple recession.',
+            grafts: 'Typical planning range: 1,500–2,500 grafts.',
+            next: 'Prioritize a natural hairline design and conservative density.' },
+      ru: { pattern: 'Вероятно, Норвуд 3 — выраженное лобно-височное отступление.',
+            grafts: 'Ориентировочный диапазон: 1 500–2 500 графтов.',
+            next: 'В приоритете — естественный дизайн линии роста и сдержанная плотность.' }
+    },
+    4: {
+      en: { pattern: 'Likely Norwood 4 — front + crown involvement.',
+            grafts: 'Typical planning range: 3,000–4,000 grafts.',
+            next: 'Prioritize hairline framing first, then assess crown coverage based on donor capacity.' },
+      ru: { pattern: 'Вероятно, Норвуд 4 — поредение в зоне лба и макушки.',
+            grafts: 'Ориентировочный диапазон: 3 000–4 000 графтов.',
+            next: 'Сначала восстановите фронтальную линию, затем оцените макушку по запасу донорской зоны.' }
+    },
+    5: {
+      en: { pattern: 'Likely Norwood 5 — larger frontal and crown loss.',
+            grafts: 'Typical planning range: 4,000–5,500 grafts.',
+            next: 'Plan coverage in stages and protect the donor area.' },
+      ru: { pattern: 'Вероятно, Норвуд 5 — значительная потеря в зоне лба и макушки.',
+            grafts: 'Ориентировочный диапазон: 4 000–5 500 графтов.',
+            next: 'Планируйте восстановление поэтапно и берегите донорскую зону.' }
+    },
+    6: {
+      en: { pattern: 'Likely Norwood 6 — extensive top/crown loss.',
+            grafts: 'Typical planning range: 5,000–6,500+ grafts.',
+            next: 'Discuss realistic density and a staged restoration plan with a surgeon.' },
+      ru: { pattern: 'Вероятно, Норвуд 6 — обширная потеря по верху и макушке.',
+            grafts: 'Ориентировочный диапазон: 5 000–6 500+ графтов.',
+            next: 'Обсудите с хирургом реалистичную плотность и поэтапное восстановление.' }
+    },
+    7: {
+      en: { pattern: 'Likely Norwood 7 — advanced hair loss with limited donor planning.',
+            grafts: 'Typical planning range: 6,000+ grafts when donor capacity allows.',
+            next: 'Evaluate donor limitations and consider SMP or a combined strategy.' },
+      ru: { pattern: 'Вероятно, Норвуд 7 — выраженное облысение, ограниченный запас донорской зоны.',
+            grafts: 'Ориентировочный диапазон: от 6 000 графтов при достаточной донорской зоне.',
+            next: 'Оцените ограничения донорской зоны и рассмотрите SMP или комбинированный подход.' }
+    }
+  };
+
+  const NORWOOD_LABELS = {
+    en: {
+      title: (s) => 'Norwood ' + s,
+      emailedTo: (e) => 'A copy has been emailed to ' + e + '.',
+      emailedSkipped: 'Your estimate is shown above. (Email delivery is not yet enabled on this site — see deployment notes.)',
+      emailInvalid: 'Please enter a valid email address.',
+      emailFailed: 'We saved your selection but couldn’t send the email right now. Please try again.',
+      stageRequired: 'Please pick a stage to continue.'
+    },
+    ru: {
+      title: (s) => 'Норвуд ' + s,
+      emailedTo: (e) => 'Копия отправлена на ' + e + '.',
+      emailedSkipped: 'Ваш расчёт показан выше. (Отправка email пока не настроена — см. документацию деплоя.)',
+      emailInvalid: 'Пожалуйста, введите корректный email.',
+      emailFailed: 'Мы сохранили ваш выбор, но не смогли отправить письмо. Попробуйте ещё раз.',
+      stageRequired: 'Пожалуйста, выберите стадию, чтобы продолжить.'
+    }
+  };
+
+  let selectedStage = null;
+
+  const stageCards = document.querySelectorAll('#norwood [data-stage]');
+  const continueBtn = document.getElementById('norwood-to-email');
+  const stagesPanel = document.querySelector('[data-step="stages"]');
+  const emailPanel = document.querySelector('[data-step="email"]');
+  const resultPanel = document.querySelector('[data-step="result"]');
+  const stepMarkers = document.querySelectorAll('[data-step-marker]');
+  const summaryImg = document.getElementById('norwood-summary-img');
+  const summaryTitle = document.getElementById('norwood-summary-title');
+  const changeBtn = document.getElementById('norwood-change');
+  const form = document.getElementById('norwood-form');
+  const emailInput = document.getElementById('norwood-email');
+  const errorEl = document.getElementById('norwood-error');
+  const submitBtn = document.getElementById('norwood-submit');
+  const resultImg = document.getElementById('norwood-result-img');
+  const resultTitle = document.getElementById('norwood-result-title');
+  const resultPattern = document.getElementById('norwood-result-pattern');
+  const resultGrafts = document.getElementById('norwood-result-grafts');
+  const resultNext = document.getElementById('norwood-result-next');
+  const resultEmail = document.getElementById('norwood-result-email');
+  const restartBtn = document.getElementById('norwood-restart');
+
+  function setActivePanel(name) {
+    [stagesPanel, emailPanel, resultPanel].forEach(p => {
+      const isActive = p.getAttribute('data-step') === name;
+      p.classList.toggle('is-active', isActive);
+      p.hidden = !isActive;
+    });
+    const stepIndex = name === 'stages' ? 1 : name === 'email' ? 2 : 3;
+    stepMarkers.forEach(m => {
+      m.classList.toggle('is-active', Number(m.getAttribute('data-step-marker')) === stepIndex);
+    });
+  }
+
+  function selectStage(stage) {
+    selectedStage = stage;
+    stageCards.forEach(card => {
+      const match = Number(card.getAttribute('data-stage')) === stage;
+      card.setAttribute('aria-checked', match ? 'true' : 'false');
+    });
+    continueBtn.disabled = false;
+  }
+
+  stageCards.forEach(card => {
+    card.addEventListener('click', () => selectStage(Number(card.getAttribute('data-stage'))));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        selectStage(Number(card.getAttribute('data-stage')));
+      }
+    });
+  });
+
+  function fillSummary() {
+    const card = document.querySelector('#norwood [data-stage="' + selectedStage + '"]');
+    const img = card.querySelector('img');
+    summaryImg.src = img.src;
+    summaryImg.alt = img.alt;
+    const labels = NORWOOD_LABELS[currentLang] || NORWOOD_LABELS.en;
+    summaryTitle.textContent = labels.title(selectedStage);
+  }
+
+  continueBtn.addEventListener('click', () => {
+    if (!selectedStage) return;
+    fillSummary();
+    setActivePanel('email');
+    setTimeout(() => emailInput.focus(), 50);
+    emailPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  changeBtn.addEventListener('click', () => {
+    setActivePanel('stages');
+    stagesPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  function isValidEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+  }
+
+  function showError(msg) {
+    errorEl.textContent = msg || '';
+    emailInput.setAttribute('aria-invalid', msg ? 'true' : 'false');
+  }
+
+  emailInput.addEventListener('input', () => {
+    if (errorEl.textContent) showError('');
+  });
+
+  function fillResult(emailed, emailValue) {
+    const lang = currentLang === 'ru' ? 'ru' : 'en';
+    const data = NORWOOD_DATA[selectedStage][lang];
+    const labels = NORWOOD_LABELS[lang];
+    const card = document.querySelector('#norwood [data-stage="' + selectedStage + '"]');
+    const img = card.querySelector('img');
+    resultImg.src = img.src;
+    resultImg.alt = img.alt;
+    resultTitle.textContent = labels.title(selectedStage);
+    resultPattern.textContent = data.pattern;
+    resultGrafts.textContent = data.grafts;
+    resultNext.textContent = data.next;
+    resultEmail.textContent = emailed ? labels.emailedTo(emailValue) : labels.emailedSkipped;
+  }
+
+  async function sendToLoops(payload) {
+    if (!NORWOOD_ENDPOINT) {
+      // No backend configured — surface result without sending email.
+      return { ok: false, skipped: true };
+    }
+    try {
+      const res = await fetch(NORWOOD_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      return { ok: res.ok };
+    } catch (e) {
+      return { ok: false, error: e };
+    }
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const lang = currentLang === 'ru' ? 'ru' : 'en';
+    const labels = NORWOOD_LABELS[lang];
+    if (!selectedStage) {
+      showError(labels.stageRequired);
+      return;
+    }
+    const email = emailInput.value.trim();
+    if (!isValidEmail(email)) {
+      showError(labels.emailInvalid);
+      emailInput.focus();
+      return;
+    }
+    showError('');
+    submitBtn.disabled = true;
+    submitBtn.classList.add('is-loading');
+
+    const data = NORWOOD_DATA[selectedStage][lang];
+    const payload = {
+      email: email,
+      stage: selectedStage,
+      language: lang,
+      pattern: data.pattern,
+      grafts: data.grafts,
+      nextStep: data.next,
+      source: 'landing-norwood'
+    };
+
+    const result = await sendToLoops(payload);
+    submitBtn.classList.remove('is-loading');
+    submitBtn.disabled = false;
+
+    if (result.ok) {
+      fillResult(true, email);
+      setActivePanel('result');
+      resultPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else if (result.skipped) {
+      fillResult(false, email);
+      setActivePanel('result');
+      resultPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+      showError(labels.emailFailed);
+    }
+  });
+
+  restartBtn.addEventListener('click', () => {
+    selectedStage = null;
+    stageCards.forEach(c => c.setAttribute('aria-checked', 'false'));
+    continueBtn.disabled = true;
+    emailInput.value = '';
+    showError('');
+    setActivePanel('stages');
+    document.getElementById('norwood').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 
   // === SCROLL REVEAL ===
   const observer = new IntersectionObserver((entries) => {

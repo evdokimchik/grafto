@@ -697,33 +697,315 @@
   font-size: var(--text-sm);
 }
 
-/* ===== NORWOOD SCALE SECTION ===== */
-.norwood-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: var(--space-4);
-}
-
-.norwood-card {
-  text-align: center;
-  padding: var(--space-4);
+/* ===== NORWOOD SCALE — INTERACTIVE TOOL ===== */
+.norwood-tool {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .norwood-tool { padding: var(--space-10); }
+}
+
+.norwood-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-6);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.norwood-step {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-2);
+}
+.norwood-step span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: var(--radius-full);
+  background: var(--color-border);
+  color: var(--color-text);
+  font-weight: 600;
+}
+.norwood-step em { font-style: normal; }
+.norwood-step.is-active {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+.norwood-step.is-active span {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.norwood-panel { display: none; }
+.norwood-panel.is-active { display: block; }
+
+.norwood-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+@media (min-width: 520px) { .norwood-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 820px) { .norwood-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1100px) { .norwood-grid { grid-template-columns: repeat(7, 1fr); gap: var(--space-3); } }
+
+.norwood-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: center;
+  padding: 0;
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
   border-radius: var(--radius-lg);
+  font-family: inherit;
+  color: inherit;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color var(--transition-interactive), transform var(--transition-interactive), box-shadow var(--transition-interactive);
+}
+.norwood-card:hover { border-color: var(--color-primary); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.norwood-card:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px oklch(from var(--color-primary) l c h / 0.25);
+}
+.norwood-card[aria-checked="true"] {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary) inset, var(--shadow-md);
+  background: var(--color-primary-light);
+}
+
+.norwood-card__media {
+  aspect-ratio: 1 / 1;
+  background: var(--color-surface-2);
+  overflow: hidden;
+}
+.norwood-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .norwood-card__stage {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   color: var(--color-primary);
-  margin-bottom: var(--space-1);
+  margin-top: var(--space-2);
 }
 
 .norwood-card__label {
   font-size: var(--text-xs);
   color: var(--color-text-muted);
+  padding: 0 var(--space-2) var(--space-3);
+  line-height: 1.3;
 }
+
+.norwood-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-4);
+  margin-top: var(--space-6);
+}
+.norwood-hint {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.norwood-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface-2);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-5);
+}
+.norwood-summary__thumb {
+  flex: 0 0 56px;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-surface);
+}
+.norwood-summary__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.norwood-summary__body { flex: 1; min-width: 0; }
+.norwood-summary__eyebrow {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+.norwood-summary__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.norwood-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--color-primary);
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: var(--text-xs);
+}
+.norwood-link:hover { color: var(--color-primary-hover); }
+
+.norwood-form { display: flex; flex-direction: column; gap: var(--space-2); }
+.norwood-form__row {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.norwood-form__row .form-input { flex: 1 1 220px; min-width: 0; }
+.norwood-form__row .btn { flex: 0 0 auto; }
+
+.norwood-form .form-input[aria-invalid="true"] {
+  border-color: #C8362A;
+  box-shadow: 0 0 0 3px oklch(from #C8362A l c h / 0.15);
+}
+
+.norwood-error {
+  font-size: var(--text-xs);
+  color: #C8362A;
+  margin: 0;
+  min-height: 1em;
+}
+.norwood-consent {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin: var(--space-2) 0 0;
+}
+.norwood-consent a { color: var(--color-primary); }
+
+.norwood-btn-spinner {
+  display: none;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  animation: norwood-spin 0.7s linear infinite;
+}
+.is-loading .norwood-btn-spinner { display: inline-block; }
+.is-loading .norwood-btn-label { opacity: 0.7; }
+@keyframes norwood-spin { to { transform: rotate(360deg); } }
+
+.norwood-result {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+}
+.norwood-result__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+}
+.norwood-result__thumb {
+  flex: 0 0 80px;
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-surface-2);
+}
+.norwood-result__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.norwood-result__eyebrow {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-1);
+}
+.norwood-result__title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  margin: 0;
+  color: var(--color-text);
+}
+
+.norwood-result__grid {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-5);
+}
+.norwood-result__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-1);
+  padding: var(--space-3) 0;
+  border-bottom: 1px dashed var(--color-border);
+}
+.norwood-result__row:last-child { border-bottom: 0; }
+@media (min-width: 640px) {
+  .norwood-result__row { grid-template-columns: 180px 1fr; align-items: baseline; gap: var(--space-4); }
+}
+.norwood-result__row dt {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  margin: 0;
+}
+.norwood-result__row dd {
+  margin: 0;
+  color: var(--color-text);
+  font-size: var(--text-base);
+}
+
+.norwood-result__email {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-3);
+}
+
+.norwood-result__disclaimer {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-5);
+  font-style: italic;
+}
+
+.norwood-cta {
+  background: var(--color-primary-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: flex-start;
+}
+.norwood-cta__text {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text);
+}
+.norwood-cta .btn { white-space: normal; }
 
 /* ===== FOOTER ===== */
 .footer {
