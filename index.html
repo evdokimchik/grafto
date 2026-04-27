@@ -223,6 +223,16 @@
 <link rel="stylesheet" href="./base.css">
 <link rel="stylesheet" href="./style.css">
   <link rel="icon" href="./logo.jpg" type="image/jpeg">
+
+  <!--
+    Norwood lead-capture endpoint.
+    Set this to the deployed Worker / Apps Script Web App URL that proxies
+    Loops + appends a row to the Google Sheet "Collected emails: Norwood scale".
+    See norwood/README.md and DEPLOY.md for ready-to-deploy snippets.
+    Leave empty until configured — the form will still show the user their
+    estimate (no apologetic message), but no email is sent and no row is logged.
+  -->
+  <script>window.GRAFTO_NORWOOD_ENDPOINT = "";</script>
 </head>
 <body>
 
@@ -1202,8 +1212,10 @@
           <p class="norwood-result__disclaimer" data-lang="ru" style="display:none">Это не медицинская рекомендация. Окончательный план зависит от оценки донорской зоны, состояния кожи головы и заключения хирурга.</p>
 
           <div class="norwood-cta">
-            <p class="norwood-cta__text" data-lang="en">Get a detailed photo-based breakdown — costs in different countries for hair transplant and SMP, and personalized recommendations — in the Grafto app.</p>
-            <p class="norwood-cta__text" data-lang="ru" style="display:none">Получите детальный разбор по фото — стоимость пересадки и SMP в разных странах и персональные рекомендации — в приложении Grafto.</p>
+            <div class="norwood-cta__eyebrow" data-lang="en">Next step</div>
+            <div class="norwood-cta__eyebrow" data-lang="ru" style="display:none">Следующий шаг</div>
+            <h3 class="norwood-cta__heading" data-lang="en">Get a detailed photo-based breakdown — <span class="norwood-cta__accent">costs in different countries</span> for hair transplant and SMP, and <span class="norwood-cta__accent">personalized recommendations</span> — in the Grafto app.</h3>
+            <h3 class="norwood-cta__heading" data-lang="ru" style="display:none">Получите детальный разбор по фото — <span class="norwood-cta__accent">стоимость пересадки и SMP в разных странах</span> и <span class="norwood-cta__accent">персональные рекомендации</span> — в приложении Grafto.</h3>
             <a href="https://apps.apple.com/app/grafto-hair-transplant-smp/id6759666757" target="_blank" rel="noopener noreferrer" class="btn btn--primary norwood-cta__btn">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 1c-1.4.1-3 .9-4 2-1 1-1.7 2.5-1.5 4 1.5 0 3-.8 4-1.9 1-1 1.7-2.5 1.5-4.1zM20 17.4c-.6 1.3-.9 1.9-1.6 3-1 1.6-2.5 3.6-4.4 3.6-1.6 0-2-1.1-4.2-1.1s-2.7 1.1-4.3 1.1c-1.9 0-3.3-1.8-4.3-3.4-2.8-4.5-3.1-9.7-1.4-12.5 1.2-2 3.1-3.2 4.9-3.2 1.8 0 3 1 4.5 1 1.5 0 2.4-1 4.5-1 1.6 0 3.3.9 4.5 2.4-3.9 2.2-3.3 7.9 1.8 10.1z"/></svg>
               <span data-lang="en">Download on the App Store</span>
@@ -1705,17 +1717,17 @@ App Store app: "Grafto: Hair Transplant & SMP" — https://apps.apple.com/app/gr
     en: {
       title: (s) => 'Norwood ' + s,
       emailedTo: (e) => 'A copy has been emailed to ' + e + '.',
-      emailedSkipped: 'Your estimate is shown above. (Email delivery is not yet enabled on this site — see deployment notes.)',
+      emailedSkipped: '',
       emailInvalid: 'Please enter a valid email address.',
-      emailFailed: 'We saved your selection but couldn’t send the email right now. Please try again.',
+      emailFailed: 'We couldn’t send your email right now. Please try again in a moment.',
       stageRequired: 'Please pick a stage to continue.'
     },
     ru: {
       title: (s) => 'Норвуд ' + s,
       emailedTo: (e) => 'Копия отправлена на ' + e + '.',
-      emailedSkipped: 'Ваш расчёт показан выше. (Отправка email пока не настроена — см. документацию деплоя.)',
+      emailedSkipped: '',
       emailInvalid: 'Пожалуйста, введите корректный email.',
-      emailFailed: 'Мы сохранили ваш выбор, но не смогли отправить письмо. Попробуйте ещё раз.',
+      emailFailed: 'Не удалось отправить письмо. Пожалуйста, попробуйте ещё раз через минуту.',
       stageRequired: 'Пожалуйста, выберите стадию, чтобы продолжить.'
     }
   };
@@ -1821,7 +1833,9 @@ App Store app: "Grafto: Hair Transplant & SMP" — https://apps.apple.com/app/gr
     resultPattern.textContent = data.pattern;
     resultGrafts.textContent = data.grafts;
     resultNext.textContent = data.next;
-    resultEmail.textContent = emailed ? labels.emailedTo(emailValue) : labels.emailedSkipped;
+    const emailMsg = emailed ? labels.emailedTo(emailValue) : labels.emailedSkipped;
+    resultEmail.textContent = emailMsg;
+    resultEmail.hidden = !emailMsg;
   }
 
   async function sendToLoops(payload) {
@@ -1884,6 +1898,8 @@ App Store app: "Grafto: Hair Transplant & SMP" — https://apps.apple.com/app/gr
       setActivePanel('result');
       resultPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else if (result.skipped) {
+      // Endpoint not configured — still show the user their estimate
+      // (no apologetic developer-facing copy in the UI).
       fillResult(false, email);
       setActivePanel('result');
       resultPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
