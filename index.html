@@ -225,14 +225,15 @@
   <link rel="icon" href="./logo.jpg" type="image/jpeg">
 
   <!--
-    Norwood lead-capture endpoint.
-    Set this to the deployed Worker / Apps Script Web App URL that proxies
-    Loops + appends a row to the Google Sheet "Collected emails: Norwood scale".
-    See norwood/README.md and DEPLOY.md for ready-to-deploy snippets.
-    Leave empty until configured — the form will still show the user their
-    estimate (no apologetic message), but no email is sent and no row is logged.
+    Norwood lead-capture: posts ONLY the visitor's email address to a Google Form
+    (no API keys, no secrets, no PII beyond email). The values below are public
+    Google Forms identifiers — safe to embed in client code.
+    See norwood/README.md and DEPLOY.md for details.
   -->
-  <script>window.GRAFTO_NORWOOD_ENDPOINT = "https://script.google.com/macros/s/AKfycbzVwGw9IH312f8JBr8hsKoWTND3IAFcm1aDwPAOlpg6Qtkhb8jPdiNovmWU_MtVu4to/exec";</script>
+  <script>
+    window.GRAFTO_NORWOOD_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScAethmSc6kM82Kv6hYmEPzGqUmnOkGsPK7rHydh3abKGTdeA/formResponse";
+    window.GRAFTO_NORWOOD_EMAIL_ENTRY = "entry.2119806365";
+  </script>
 </head>
 <body>
 
@@ -1174,8 +1175,8 @@
             </button>
           </div>
           <p class="norwood-error" id="norwood-error" role="alert"></p>
-          <p class="norwood-consent" data-lang="en">By continuing you agree to receive a one-time email with your estimate. We respect your privacy — see our <a href="https://grafto.hair/privacy_policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</p>
-          <p class="norwood-consent" data-lang="ru" style="display:none">Продолжая, вы соглашаетесь получить единоразовое письмо с вашим расчётом. Мы уважаем вашу приватность — см. <a href="https://grafto.hair/privacy_policy" target="_blank" rel="noopener noreferrer">Политику конфиденциальности</a>.</p>
+          <p class="norwood-consent" data-lang="en">By continuing you agree to share your email so we can keep you updated about Grafto. We respect your privacy — see our <a href="https://grafto.hair/privacy_policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</p>
+          <p class="norwood-consent" data-lang="ru" style="display:none">Продолжая, вы соглашаетесь поделиться email, чтобы мы могли держать вас в курсе новостей Grafto. Мы уважаем вашу приватность — см. <a href="https://grafto.hair/privacy_policy" target="_blank" rel="noopener noreferrer">Политику конфиденциальности</a>.</p>
         </form>
       </div>
 
@@ -1644,15 +1645,13 @@ App Store app: "Grafto: Hair Transplant & SMP" — https://apps.apple.com/app/gr
   }
 
   // === NORWOOD INTERACTIVE ASSESSMENT ===
-  // Endpoint that proxies to Loops + appends a row to the Google Sheet "Collected emails: Norwood scale".
-  // Keeps API keys server-side. Configure at deploy time.
-  // Example payload sent: { email, stage, language, pattern, grafts, nextStep, source,
-  //                          timestamp, appUrl, pageUrl, referrer, userAgent }
-  // The endpoint should: (1) update/create the contact in Loops, (2) send a transactional email
-  // using a template ID stored in env (e.g. LOOPS_TRANSACTIONAL_ID), (3) append a lead row to the
-  // Google Sheet using a service account or Apps Script webhook. Until configured, the form shows a
-  // graceful fallback so the result still appears (email delivery is just skipped).
-  const NORWOOD_ENDPOINT = (typeof window !== 'undefined' && window.GRAFTO_NORWOOD_ENDPOINT) || '';
+  // Submits ONLY the visitor's email address to a Google Form. The form URL and
+  // email entry ID are public Google Forms identifiers (not secrets). No other
+  // fields (stage, result, language, pageUrl, referrer, userAgent, etc.) are
+  // collected or transmitted. The Norwood result is shown locally in the browser
+  // after submission.
+  const NORWOOD_FORM_URL = (typeof window !== 'undefined' && window.GRAFTO_NORWOOD_FORM_URL) || '';
+  const NORWOOD_EMAIL_ENTRY = (typeof window !== 'undefined' && window.GRAFTO_NORWOOD_EMAIL_ENTRY) || '';
 
   const NORWOOD_DATA = {
     1: {
@@ -1716,18 +1715,18 @@ App Store app: "Grafto: Hair Transplant & SMP" — https://apps.apple.com/app/gr
   const NORWOOD_LABELS = {
     en: {
       title: (s) => 'Norwood ' + s,
-      emailedTo: (e) => 'A copy has been emailed to ' + e + '.',
-      emailedSkipped: '',
+      emailSaved: 'Thanks — your email was saved.',
+      emailSkipped: '',
       emailInvalid: 'Please enter a valid email address.',
-      emailFailed: 'We couldn’t send your email right now. Please try again in a moment.',
+      emailFailed: 'We couldn’t save your email right now. Please try again in a moment.',
       stageRequired: 'Please pick a stage to continue.'
     },
     ru: {
       title: (s) => 'Норвуд ' + s,
-      emailedTo: (e) => 'Копия отправлена на ' + e + '.',
-      emailedSkipped: '',
+      emailSaved: 'Спасибо — ваш email сохранён.',
+      emailSkipped: '',
       emailInvalid: 'Пожалуйста, введите корректный email.',
-      emailFailed: 'Не удалось отправить письмо. Пожалуйста, попробуйте ещё раз через минуту.',
+      emailFailed: 'Не удалось сохранить email. Пожалуйста, попробуйте ещё раз через минуту.',
       stageRequired: 'Пожалуйста, выберите стадию, чтобы продолжить.'
     }
   };
@@ -1821,7 +1820,7 @@ App Store app: "Grafto: Hair Transplant & SMP" — https://apps.apple.com/app/gr
     if (errorEl.textContent) showError('');
   });
 
-  function fillResult(emailed, emailValue) {
+  function fillResult(saved) {
     const lang = currentLang === 'ru' ? 'ru' : 'en';
     const data = NORWOOD_DATA[selectedStage][lang];
     const labels = NORWOOD_LABELS[lang];
@@ -1833,23 +1832,23 @@ App Store app: "Grafto: Hair Transplant & SMP" — https://apps.apple.com/app/gr
     resultPattern.textContent = data.pattern;
     resultGrafts.textContent = data.grafts;
     resultNext.textContent = data.next;
-    const emailMsg = emailed ? labels.emailedTo(emailValue) : labels.emailedSkipped;
-    resultEmail.textContent = emailMsg;
-    resultEmail.hidden = !emailMsg;
+    const msg = saved ? labels.emailSaved : labels.emailSkipped;
+    resultEmail.textContent = msg;
+    resultEmail.hidden = !msg;
   }
 
-  async function sendToLoops(payload) {
-    if (!NORWOOD_ENDPOINT) {
-      // No backend configured — surface result without sending email.
+  async function sendEmailToGoogleForm(email) {
+    if (!NORWOOD_FORM_URL || !NORWOOD_EMAIL_ENTRY) {
       return { ok: false, skipped: true };
     }
     try {
-      const res = await fetch(NORWOOD_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      return { ok: res.ok };
+      const fd = new FormData();
+      fd.append(NORWOOD_EMAIL_ENTRY, email);
+      // Google Forms blocks CORS reads; mode: 'no-cors' returns an opaque
+      // response. Reaching this line without throwing means the request
+      // was dispatched, which we treat as success.
+      await fetch(NORWOOD_FORM_URL, { method: 'POST', mode: 'no-cors', body: fd });
+      return { ok: true };
     } catch (e) {
       return { ok: false, error: e };
     }
@@ -1873,34 +1872,17 @@ App Store app: "Grafto: Hair Transplant & SMP" — https://apps.apple.com/app/gr
     submitBtn.disabled = true;
     submitBtn.classList.add('is-loading');
 
-    const data = NORWOOD_DATA[selectedStage][lang];
-    const payload = {
-      email: email,
-      stage: selectedStage,
-      language: lang,
-      pattern: data.pattern,
-      grafts: data.grafts,
-      nextStep: data.next,
-      source: 'landing-norwood',
-      timestamp: new Date().toISOString(),
-      appUrl: 'https://apps.apple.com/app/grafto-hair-transplant-smp/id6759666757',
-      pageUrl: (typeof window !== 'undefined' && window.location) ? window.location.href : '',
-      referrer: (typeof document !== 'undefined' && document.referrer) ? document.referrer : '',
-      userAgent: (typeof navigator !== 'undefined' && navigator.userAgent) ? navigator.userAgent : ''
-    };
-
-    const result = await sendToLoops(payload);
+    const result = await sendEmailToGoogleForm(email);
     submitBtn.classList.remove('is-loading');
     submitBtn.disabled = false;
 
     if (result.ok) {
-      fillResult(true, email);
+      fillResult(true);
       setActivePanel('result');
       resultPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else if (result.skipped) {
-      // Endpoint not configured — still show the user their estimate
-      // (no apologetic developer-facing copy in the UI).
-      fillResult(false, email);
+      // Form endpoint not configured — still show the user their estimate.
+      fillResult(false);
       setActivePanel('result');
       resultPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else {

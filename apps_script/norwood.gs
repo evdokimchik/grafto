@@ -1,5 +1,12 @@
 /**
- * Norwood lead capture — Google Apps Script Web App.
+ * LEGACY / NOT IN USE — kept for reference only.
+ *
+ * The live site at https://start.grafto.hair/ no longer calls this Apps Script.
+ * Lead capture now posts the visitor's email (and only the email) to a Google
+ * Form named "Grafto Norwood Scale Leads". See ../norwood/README.md and
+ * ../DEPLOY.md for the current production path.
+ *
+ * Norwood lead capture — Google Apps Script Web App (legacy).
  *
  * Deployed as: Web app, "Execute as: Me", "Who has access: Anyone".
  * Receives JSON from https://start.grafto.hair/ Norwood form, appends a row
