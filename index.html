@@ -1632,11 +1632,14 @@ App Store app: "Grafto: Hair Transplant & SMP" — https://apps.apple.com/app/gr
   }
 
   // === NORWOOD INTERACTIVE ASSESSMENT ===
-  // Endpoint that proxies to Loops (keeps API key server-side). Configure at deploy time.
-  // Example payload sent: { email, stage, language, pattern, grafts, nextStep, source: 'landing-norwood' }
+  // Endpoint that proxies to Loops + appends a row to the Google Sheet "Collected emails: Norwood scale".
+  // Keeps API keys server-side. Configure at deploy time.
+  // Example payload sent: { email, stage, language, pattern, grafts, nextStep, source,
+  //                          timestamp, appUrl, pageUrl, referrer, userAgent }
   // The endpoint should: (1) update/create the contact in Loops, (2) send a transactional email
-  // using a template ID stored in env (e.g. LOOPS_TRANSACTIONAL_ID). Until configured, the form
-  // shows a graceful fallback so the result still appears (email delivery is just skipped).
+  // using a template ID stored in env (e.g. LOOPS_TRANSACTIONAL_ID), (3) append a lead row to the
+  // Google Sheet using a service account or Apps Script webhook. Until configured, the form shows a
+  // graceful fallback so the result still appears (email delivery is just skipped).
   const NORWOOD_ENDPOINT = (typeof window !== 'undefined' && window.GRAFTO_NORWOOD_ENDPOINT) || '';
 
   const NORWOOD_DATA = {
@@ -1864,7 +1867,12 @@ App Store app: "Grafto: Hair Transplant & SMP" — https://apps.apple.com/app/gr
       pattern: data.pattern,
       grafts: data.grafts,
       nextStep: data.next,
-      source: 'landing-norwood'
+      source: 'landing-norwood',
+      timestamp: new Date().toISOString(),
+      appUrl: 'https://apps.apple.com/app/grafto-hair-transplant-smp/id6759666757',
+      pageUrl: (typeof window !== 'undefined' && window.location) ? window.location.href : '',
+      referrer: (typeof document !== 'undefined' && document.referrer) ? document.referrer : '',
+      userAgent: (typeof navigator !== 'undefined' && navigator.userAgent) ? navigator.userAgent : ''
     };
 
     const result = await sendToLoops(payload);
