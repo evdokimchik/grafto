@@ -229,10 +229,14 @@
     (no API keys, no secrets, no PII beyond email). The values below are public
     Google Forms identifiers — safe to embed in client code.
     See norwood/README.md and DEPLOY.md for details.
+    Android waitlist uses the same public Google Forms pattern and also sends
+    ONLY the visitor's email address.
   -->
   <script>
     window.GRAFTO_NORWOOD_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScAethmSc6kM82Kv6hYmEPzGqUmnOkGsPK7rHydh3abKGTdeA/formResponse";
     window.GRAFTO_NORWOOD_EMAIL_ENTRY = "entry.2119806365";
+    window.GRAFTO_ANDROID_WAITLIST_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScCpKmknKFL5vpHjfRrpKU6tUxeTbqDVMs6DKm-reyLnjpiew/formResponse";
+    window.GRAFTO_ANDROID_WAITLIST_EMAIL_ENTRY = "entry.1557041389";
   </script>
 </head>
 <body>
@@ -1283,8 +1287,28 @@
         </a>
         <div class="app-badge app-badge--coming">
           <img src="./google_play.svg" alt="Get it on Google Play" class="badge-gplay" style="opacity:0.5;filter:grayscale(0.4);">
-          <span class="app-badge__soon" data-lang="en">Coming soon</span>
-          <span class="app-badge__soon" data-lang="ru" style="display:none">Скоро</span>
+          <form class="android-waitlist" id="android-waitlist-form" novalidate>
+            <label class="sr-only" for="android-waitlist-email" data-lang="en">Email for Android waitlist</label>
+            <label class="sr-only" for="android-waitlist-email" data-lang="ru" style="display:none">Email для листа ожидания Android</label>
+            <div class="android-waitlist__controls">
+              <input
+                class="android-waitlist__input"
+                id="android-waitlist-email"
+                name="email"
+                type="email"
+                inputmode="email"
+                autocomplete="email"
+                placeholder="Email"
+                aria-describedby="android-waitlist-message"
+                required
+              >
+              <button class="android-waitlist__button" id="android-waitlist-submit" type="submit">
+                <span data-lang="en">Join waitlist</span>
+                <span data-lang="ru" style="display:none">В лист ожидания</span>
+              </button>
+            </div>
+            <p class="android-waitlist__message" id="android-waitlist-message" role="status" aria-live="polite"></p>
+          </form>
         </div>
       </div>
     </div>
@@ -1489,6 +1513,83 @@
     a.click();
     URL.revokeObjectURL(a.href);
   });
+
+  // === ANDROID WAITLIST ===
+  // Submits ONLY the visitor's email address to the Android waitlist Google Form.
+  const ANDROID_WAITLIST_FORM_URL = (typeof window !== 'undefined' && window.GRAFTO_ANDROID_WAITLIST_FORM_URL) || '';
+  const ANDROID_WAITLIST_EMAIL_ENTRY = (typeof window !== 'undefined' && window.GRAFTO_ANDROID_WAITLIST_EMAIL_ENTRY) || '';
+  const androidWaitlistForm = document.getElementById('android-waitlist-form');
+  const androidWaitlistEmail = document.getElementById('android-waitlist-email');
+  const androidWaitlistSubmit = document.getElementById('android-waitlist-submit');
+  const androidWaitlistMessage = document.getElementById('android-waitlist-message');
+
+  const ANDROID_WAITLIST_LABELS = {
+    en: {
+      invalid: 'Please enter a valid email address.',
+      success: 'Thanks — we’ll email you when Android is ready.',
+      failed: 'We couldn’t save your email right now. Please try again in a moment.'
+    },
+    ru: {
+      invalid: 'Пожалуйста, введите корректный email.',
+      success: 'Спасибо — мы напишем, когда Android-версия будет готова.',
+      failed: 'Не удалось сохранить email. Пожалуйста, попробуйте ещё раз через минуту.'
+    }
+  };
+
+  function setAndroidWaitlistMessage(type, text) {
+    androidWaitlistMessage.textContent = text || '';
+    androidWaitlistMessage.classList.toggle('is-error', type === 'error');
+    androidWaitlistMessage.classList.toggle('is-success', type === 'success');
+    androidWaitlistEmail.setAttribute('aria-invalid', type === 'error' ? 'true' : 'false');
+  }
+
+  async function sendAndroidWaitlistEmail(email) {
+    if (!ANDROID_WAITLIST_FORM_URL || !ANDROID_WAITLIST_EMAIL_ENTRY) {
+      return { ok: false };
+    }
+    try {
+      const fd = new FormData();
+      fd.append(ANDROID_WAITLIST_EMAIL_ENTRY, email);
+      await fetch(ANDROID_WAITLIST_FORM_URL, { method: 'POST', mode: 'no-cors', body: fd });
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, error: e };
+    }
+  }
+
+  if (androidWaitlistForm) {
+    androidWaitlistEmail.addEventListener('input', () => {
+      if (androidWaitlistMessage.textContent) setAndroidWaitlistMessage('', '');
+    });
+
+    androidWaitlistForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const lang = currentLang === 'ru' ? 'ru' : 'en';
+      const labels = ANDROID_WAITLIST_LABELS[lang];
+      const email = androidWaitlistEmail.value.trim();
+
+      if (!isValidEmail(email)) {
+        setAndroidWaitlistMessage('error', labels.invalid);
+        androidWaitlistEmail.focus();
+        return;
+      }
+
+      setAndroidWaitlistMessage('', '');
+      androidWaitlistSubmit.disabled = true;
+      androidWaitlistSubmit.classList.add('is-loading');
+
+      const result = await sendAndroidWaitlistEmail(email);
+      androidWaitlistSubmit.disabled = false;
+      androidWaitlistSubmit.classList.remove('is-loading');
+
+      if (result.ok) {
+        androidWaitlistForm.reset();
+        setAndroidWaitlistMessage('success', labels.success);
+      } else {
+        setAndroidWaitlistMessage('error', labels.failed);
+      }
+    });
+  }
 
   function getEnChecklist() {
     return `GRAFTO — HAIR RESTORATION CONSULTATION CHECKLIST
