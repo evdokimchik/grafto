@@ -1365,10 +1365,19 @@
 .partnership__text {
   font-size: var(--text-sm);
   color: var(--color-text-muted);
-  max-width: 520px;
+  max-width: 760px;
   margin-inline: auto;
   margin-bottom: var(--space-4);
   line-height: 1.6;
+}
+
+.partnership__note {
+  max-width: 680px;
+  margin: 0 auto var(--space-5);
+  color: var(--color-text);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  line-height: 1.5;
 }
 
 .btn--sm {
