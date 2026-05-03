@@ -1512,8 +1512,12 @@
   padding-left: var(--space-6);
 }
 
-.article-content a {
+.article-content a:not(.btn) {
   color: var(--color-primary);
+}
+
+.article-content .btn--primary {
+  color: #FFFFFF;
 }
 
 .article-final-cta {
@@ -1581,7 +1585,7 @@
   line-height: 1.35;
 }
 
-.article-index-card a:last-child {
+.article-index-card__secondary {
   color: var(--color-text-muted);
   font-size: var(--text-sm);
   line-height: 1.4;
@@ -1592,6 +1596,10 @@
   font-size: var(--text-xs);
   font-weight: 700;
   text-transform: uppercase;
+}
+
+.article-topbar__nav [data-lang-switch].active {
+  color: var(--color-primary);
 }
 
 @media (max-width: 640px) {

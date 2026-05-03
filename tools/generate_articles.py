@@ -21,7 +21,7 @@ DOCS = [
 ]
 SITE_URL = "https://start.grafto.hair"
 APP_URL = "https://apps.apple.com/app/grafto-hair-transplant-smp/id6759666757"
-STYLE_VERSION = "7"
+STYLE_VERSION = "8"
 
 LEGACY_ARTICLE_CLUSTERS = {
     "fue": "grafts",
@@ -387,7 +387,7 @@ def page_template(article: Article, lang: str) -> str:
       <span>Grafto</span>
     </a>
     <nav class="article-topbar__nav" aria-label="Article navigation">
-      <a href="../../">{back_label}</a>
+      <a href="../../?lang={lang}">{back_label}</a>
       <a href="../../{other_lang}/{article.slug}/">{language_label}</a>
     </nav>
   </header>
@@ -421,16 +421,21 @@ def index_template(articles: list[Article]) -> str:
         for article in grouped[key]:
             cards.append(
                 f"""<div class="article-index-card">
-          <span class="article-index-card__cluster">{html.escape(cluster["en"])}</span>
-          <a href="./en/{article.slug}/"><strong>{html.escape(article.en_title)}</strong></a>
-          <a href="./ru/{article.slug}/">{html.escape(article.ru_title)}</a>
+          <span class="article-index-card__cluster" data-lang="en">{html.escape(cluster["en"])}</span>
+          <span class="article-index-card__cluster" data-lang="ru" style="display:none">{html.escape(cluster["ru"])}</span>
+          <a href="./en/{article.slug}/" data-lang="en"><strong>{html.escape(article.en_title)}</strong></a>
+          <a href="./ru/{article.slug}/" data-lang="ru" style="display:none"><strong>{html.escape(article.ru_title)}</strong></a>
+          <span class="article-index-card__secondary" data-lang="en">{html.escape(article.ru_title)}</span>
+          <span class="article-index-card__secondary" data-lang="ru" style="display:none">{html.escape(article.en_title)}</span>
         </div>"""
             )
         sections.append(
             f"""<section class="article-index-section" id="{key}">
       <div class="section__header">
-        <h2 class="section__title">{html.escape(cluster["en"])}</h2>
-        <p class="section__subtitle">{html.escape(cluster["cta_en"])}</p>
+        <h2 class="section__title" data-lang="en">{html.escape(cluster["en"])}</h2>
+        <h2 class="section__title" data-lang="ru" style="display:none">{html.escape(cluster["ru"])}</h2>
+        <p class="section__subtitle" data-lang="en">{html.escape(cluster["cta_en"])}</p>
+        <p class="section__subtitle" data-lang="ru" style="display:none">{html.escape(cluster["cta_ru"])}</p>
       </div>
       <div class="article-index-grid">
         {"".join(cards)}
@@ -462,19 +467,82 @@ def index_template(articles: list[Article]) -> str:
       <span>Grafto</span>
     </a>
     <nav class="article-topbar__nav" aria-label="Article navigation">
-      <a href="../">Home</a>
+      <a href="../?lang=en" data-lang="en">Home</a>
+      <a href="../?lang=ru" data-lang="ru" style="display:none">Главная</a>
       <a href="{APP_URL}" target="_blank" rel="noopener noreferrer">App Store</a>
+      <a href="?lang=en" data-lang-switch="en">EN</a>
+      <a href="?lang=ru" data-lang-switch="ru">RU</a>
     </nav>
   </header>
 
   <main class="article-index-shell">
     <section class="article-index-hero">
-      <p class="article-eyebrow">Decision guides</p>
-      <h1>Hair transplant and SMP guides organized by real decisions</h1>
-      <p>Dedicated pages for cost, graft ranges, Norwood stage, clinic choice, and SMP topics. Each guide is built to help users make better decisions before booking a consultation.</p>
+      <p class="article-eyebrow" data-lang="en">Decision guides</p>
+      <p class="article-eyebrow" data-lang="ru" style="display:none">Гайды для решения</p>
+      <h1 data-lang="en">Hair transplant and SMP guides organized by real decisions</h1>
+      <h1 data-lang="ru" style="display:none">Гайды по пересадке волос и SMP по реальным решениям</h1>
+      <p data-lang="en">Dedicated pages for cost, graft ranges, Norwood stage, clinic choice, and SMP topics. Each guide is built to help users make better decisions before booking a consultation.</p>
+      <p data-lang="ru" style="display:none">Отдельные страницы по стоимости, графтам, шкале Норвуда, выбору клиники и SMP. Каждый материал помогает принять более спокойное решение до консультации.</p>
     </section>
     {"".join(sections)}
   </main>
+  <script>
+  (function() {{
+    const LANG_KEY = 'grafto_lang';
+    const LANG_MANUAL_KEY = 'grafto_lang_manual';
+
+    function browserLang() {{
+      const langs = (navigator.languages && navigator.languages.length)
+        ? navigator.languages
+        : [navigator.language || navigator.userLanguage || 'en'];
+      for (const l of langs) {{
+        const raw = (l || '').toLowerCase();
+        const code = raw.slice(0, 2);
+        if (code === 'ru' || code === 'be' || code === 'uk' || code === 'kk' || code === 'ky') return 'ru';
+        if (raw.startsWith('ru-')) return 'ru';
+      }}
+      return 'en';
+    }}
+
+    function detectLang() {{
+      try {{
+        const urlLang = new URLSearchParams(window.location.search).get('lang');
+        if (urlLang === 'ru' || urlLang === 'en') return urlLang;
+      }} catch (e) {{}}
+      try {{
+        const saved = localStorage.getItem(LANG_KEY);
+        const manual = localStorage.getItem(LANG_MANUAL_KEY);
+        if (manual === '1' && (saved === 'ru' || saved === 'en')) return saved;
+      }} catch (e) {{}}
+      return browserLang();
+    }}
+
+    function setLang(lang) {{
+      document.documentElement.lang = lang === 'ru' ? 'ru' : 'en';
+      document.querySelectorAll('[data-lang]').forEach(el => {{
+        el.style.display = el.getAttribute('data-lang') === lang ? '' : 'none';
+      }});
+      document.querySelectorAll('[data-lang-switch]').forEach(el => {{
+        el.classList.toggle('active', el.getAttribute('data-lang-switch') === lang);
+      }});
+      document.title = lang === 'ru'
+        ? 'Гайды по пересадке волос и SMP | Grafto'
+        : 'Hair Transplant Decision Guides | Grafto';
+    }}
+
+    const lang = detectLang();
+    setLang(lang);
+    document.querySelectorAll('[data-lang-switch]').forEach(link => {{
+      link.addEventListener('click', () => {{
+        const nextLang = link.getAttribute('data-lang-switch');
+        try {{
+          localStorage.setItem(LANG_KEY, nextLang);
+          localStorage.setItem(LANG_MANUAL_KEY, '1');
+        }} catch (e) {{}}
+      }});
+    }});
+  }})();
+  </script>
 </body>
 </html>
 """
