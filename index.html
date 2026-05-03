@@ -1585,6 +1585,20 @@
   // === ARTICLE VIEWS ===
   const grid = document.getElementById('articles-grid');
   const views = document.getElementById('article-views');
+  const articlePageSlugs = {
+    fue: 'fue-hair-transplant-complete-guide',
+    fut: 'fut-hair-transplant-the-strip-method',
+    dhi: 'dhi-hair-transplant-direct-implantation',
+    smp: 'scalp-micropigmentation-smp',
+    cost: 'hair-transplant-cost-turkey-russia-eu-usa',
+    gender: 'hair-transplant-for-men-and-women-key-differences',
+    clinic: 'how-to-choose-a-hair-transplant-clinic',
+    'norwood-article': 'understanding-the-norwood-scale',
+    prep: 'preparing-for-your-hair-transplant',
+    swelling: 'swelling-after-a-hair-transplant',
+    minoxidil: 'minoxidil-what-it-is-and-how-it-works',
+    expectations: 'realistic-expectations-from-a-hair-transplant',
+  };
 
   const moreRow = document.getElementById('articles-more');
   const articlesHeader = document.querySelector('#articles .section__header');
@@ -1592,6 +1606,10 @@
   document.querySelectorAll('.article-card').forEach(card => {
     card.addEventListener('click', () => {
       const id = card.getAttribute('data-article');
+      if (articlePageSlugs[id]) {
+        window.location.href = `./articles/${currentLang}/${articlePageSlugs[id]}/`;
+        return;
+      }
       grid.style.display = 'none';
       if (moreRow) moreRow.style.display = 'none';
       if (articlesHeader) articlesHeader.style.display = 'none';

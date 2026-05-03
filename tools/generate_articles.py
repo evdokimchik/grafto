@@ -8,6 +8,7 @@ import unicodedata
 import xml.etree.ElementTree as ET
 from datetime import date
 from dataclasses import dataclass
+from html.parser import HTMLParser
 from pathlib import Path
 
 from docx import Document
@@ -21,6 +22,21 @@ DOCS = [
 SITE_URL = "https://start.grafto.hair"
 APP_URL = "https://apps.apple.com/app/grafto-hair-transplant-smp/id6759666757"
 STYLE_VERSION = "7"
+
+LEGACY_ARTICLE_CLUSTERS = {
+    "fue": "grafts",
+    "fut": "grafts",
+    "dhi": "grafts",
+    "smp": "smp",
+    "cost": "cost",
+    "gender": "clinic",
+    "clinic": "clinic",
+    "norwood-article": "norwood",
+    "prep": "clinic",
+    "swelling": "clinic",
+    "minoxidil": "clinic",
+    "expectations": "clinic",
+}
 
 
 CLUSTERS = {
@@ -72,6 +88,13 @@ class Article:
     ru_title: str
     en_blocks: list[Block]
     ru_blocks: list[Block]
+
+
+@dataclass
+class Node:
+    tag: str
+    attrs: dict[str, str]
+    children: list["Node | str"]
 
 
 def clean(text: str) -> str:
@@ -136,6 +159,125 @@ def parse_doc(path: Path) -> list[Article]:
                 ru_title=ru_title,
                 en_blocks=en_blocks,
                 ru_blocks=ru_blocks,
+            )
+        )
+    return articles
+
+
+class TreeBuilder(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.root = Node("document", {}, [])
+        self.stack = [self.root]
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        node = Node(tag, {key: value or "" for key, value in attrs}, [])
+        self.stack[-1].children.append(node)
+        if tag not in {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}:
+            self.stack.append(node)
+
+    def handle_endtag(self, tag: str) -> None:
+        for index in range(len(self.stack) - 1, 0, -1):
+            if self.stack[index].tag == tag:
+                del self.stack[index:]
+                break
+
+    def handle_data(self, data: str) -> None:
+        if data:
+            self.stack[-1].children.append(data)
+
+
+def has_class(node: Node, class_name: str) -> bool:
+    return class_name in node.attrs.get("class", "").split()
+
+
+def iter_nodes(node: Node):
+    for child in node.children:
+        if isinstance(child, Node):
+            yield child
+            yield from iter_nodes(child)
+
+
+def text_content(node: Node) -> str:
+    parts: list[str] = []
+    for child in node.children:
+        if isinstance(child, str):
+            parts.append(child)
+        else:
+            parts.append(text_content(child))
+    return clean(" ".join(parts))
+
+
+def first_child_text(node: Node, tag: str) -> str:
+    for child in iter_nodes(node):
+        if child.tag == tag:
+            return text_content(child)
+    return ""
+
+
+def content_for_lang(view: Node, lang: str) -> Node | None:
+    for node in iter_nodes(view):
+        if has_class(node, "article-view__content") and node.attrs.get("data-lang") == lang:
+            return node
+    return None
+
+
+def blocks_from_content(node: Node) -> list[Block]:
+    blocks: list[Block] = []
+
+    def walk(current: Node) -> None:
+        if has_class(current, "article-cta"):
+            return
+        if current.tag == "h2":
+            return
+        if current.tag == "h3":
+            text = text_content(current)
+            if text:
+                blocks.append(Block(text, "Heading 2"))
+            return
+        if current.tag == "p":
+            text = text_content(current)
+            if text:
+                blocks.append(Block(text, ""))
+            return
+        if current.tag == "li":
+            text = text_content(current)
+            if text:
+                blocks.append(Block(text, "List Bullet"))
+            return
+        for child in current.children:
+            if isinstance(child, Node):
+                walk(child)
+
+    walk(node)
+    return blocks
+
+
+def parse_legacy_articles() -> list[Article]:
+    parser = TreeBuilder()
+    parser.feed((ROOT / "index.html").read_text(encoding="utf-8"))
+    articles: list[Article] = []
+    for view in iter_nodes(parser.root):
+        article_id = view.attrs.get("data-view")
+        if not has_class(view, "article-view") or article_id not in LEGACY_ARTICLE_CLUSTERS:
+            continue
+        en_content = content_for_lang(view, "en")
+        ru_content = content_for_lang(view, "ru")
+        if en_content is None or ru_content is None:
+            continue
+        en_title = first_child_text(en_content, "h2")
+        ru_title = first_child_text(ru_content, "h2")
+        if not en_title:
+            continue
+        articles.append(
+            Article(
+                number=100 + len(articles),
+                cluster=LEGACY_ARTICLE_CLUSTERS[article_id],
+                slug=slugify(en_title),
+                en_title=en_title,
+                ru_title=ru_title or en_title,
+                en_blocks=blocks_from_content(en_content),
+                ru_blocks=blocks_from_content(ru_content),
             )
         )
     return articles
@@ -351,7 +493,7 @@ def update_sitemap(articles: list[Article]) -> None:
     url_set = set(urls)
     for node in list(root.findall("sm:url", ns)):
         loc = node.find("sm:loc", ns)
-        if loc is not None and loc.text in url_set:
+        if loc is not None and (loc.text in url_set or "#" in (loc.text or "")):
             root.remove(node)
     existing = {loc.text for loc in root.findall("sm:url/sm:loc", ns)}
     today = date.today().isoformat()
@@ -375,6 +517,7 @@ def main() -> None:
     articles: list[Article] = []
     for doc in DOCS:
         articles.extend(parse_doc(doc))
+    articles.extend(parse_legacy_articles())
 
     out_dir = ROOT / "articles"
     if out_dir.exists():
