@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 import html
+import json
 import re
 import shutil
 import textwrap
 import unicodedata
 import xml.etree.ElementTree as ET
-from datetime import date
 from dataclasses import dataclass
 from html.parser import HTMLParser
 from pathlib import Path
@@ -22,6 +22,7 @@ DOCS = [
 SITE_URL = "https://start.grafto.hair"
 APP_URL = "https://apps.apple.com/app/grafto-hair-transplant-smp/id6759666757"
 STYLE_VERSION = "8"
+LASTMOD = "2026-05-03"
 
 LEGACY_ARTICLE_CLUSTERS = {
     "fue": "grafts",
@@ -338,6 +339,15 @@ def excerpt(blocks: list[Block]) -> str:
     return ""
 
 
+def word_count(blocks: list[Block]) -> int:
+    text = " ".join(block.text for block in blocks)
+    return len(re.findall(r"\w+", text, flags=re.UNICODE))
+
+
+def json_ld(data: dict) -> str:
+    return json.dumps(data, ensure_ascii=False, separators=(",", ":"))
+
+
 def page_template(article: Article, lang: str) -> str:
     title = article.en_title if lang == "en" else article.ru_title
     other_title = article.ru_title if lang == "en" else article.en_title
@@ -358,6 +368,37 @@ def page_template(article: Article, lang: str) -> str:
         else "Материал носит образовательный характер. Окончательный план нужно обсуждать с квалифицированным специалистом."
     )
     language_label = "Русская версия" if lang == "en" else "English version"
+    article_schema = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "description": desc,
+        "inLanguage": lang,
+        "articleSection": cluster_label,
+        "wordCount": word_count(blocks),
+        "datePublished": LASTMOD,
+        "dateModified": LASTMOD,
+        "mainEntityOfPage": {"@type": "WebPage", "@id": canonical},
+        "url": canonical,
+        "image": f"{SITE_URL}/hero.png",
+        "author": {"@type": "Organization", "name": "Grafto", "url": SITE_URL},
+        "publisher": {
+            "@type": "Organization",
+            "name": "Grafto",
+            "url": SITE_URL,
+            "logo": {"@type": "ImageObject", "url": f"{SITE_URL}/logo.jpg"},
+        },
+        "isAccessibleForFree": True,
+    }
+    breadcrumb_schema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Grafto", "item": f"{SITE_URL}/"},
+            {"@type": "ListItem", "position": 2, "name": back_label, "item": f"{SITE_URL}/articles/"},
+            {"@type": "ListItem", "position": 3, "name": title, "item": canonical},
+        ],
+    }
 
     return f"""<!DOCTYPE html>
 <html lang="{lang}" data-theme="light">
@@ -366,16 +407,23 @@ def page_template(article: Article, lang: str) -> str:
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{html.escape(title)} | Grafto</title>
   <meta name="description" content="{html.escape(desc)}">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="{canonical}">
   <link rel="alternate" hreflang="{lang}" href="{canonical}">
   <link rel="alternate" hreflang="{other_lang}" href="{alternate}">
   <link rel="alternate" hreflang="x-default" href="{SITE_URL}/articles/en/{article.slug}/">
   <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Grafto">
   <meta property="og:title" content="{html.escape(title)}">
   <meta property="og:description" content="{html.escape(desc)}">
   <meta property="og:url" content="{canonical}">
   <meta property="og:image" content="{SITE_URL}/hero.png">
+  <meta property="article:section" content="{html.escape(cluster_label)}">
+  <meta property="article:published_time" content="{LASTMOD}">
+  <meta property="article:modified_time" content="{LASTMOD}">
   <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{json_ld(article_schema)}</script>
+  <script type="application/ld+json">{json_ld(breadcrumb_schema)}</script>
   <link rel="stylesheet" href="../../../base.css">
   <link rel="stylesheet" href="../../../style.css?v={STYLE_VERSION}">
   <link rel="icon" href="../../../logo.jpg" type="image/jpeg">
@@ -443,6 +491,32 @@ def index_template(articles: list[Article]) -> str:
     </section>"""
         )
 
+    item_list_schema = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Hair Transplant and SMP Guides",
+        "url": f"{SITE_URL}/articles/",
+        "numberOfItems": len(articles),
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": index + 1,
+                "name": article.en_title,
+                "url": f"{SITE_URL}/articles/en/{article.slug}/",
+            }
+            for index, article in enumerate(articles)
+        ],
+    }
+    web_page_schema = {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Hair Transplant and SMP Guides",
+        "description": "Guides on hair transplant cost, graft counts, Norwood stages, clinic choice, and SMP from Grafto.",
+        "url": f"{SITE_URL}/articles/",
+        "inLanguage": ["en", "ru"],
+        "isPartOf": {"@type": "WebSite", "name": "Grafto", "url": f"{SITE_URL}/"},
+    }
+
     return f"""<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -450,12 +524,18 @@ def index_template(articles: list[Article]) -> str:
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hair Transplant and SMP Guides | Grafto</title>
   <meta name="description" content="Guides on hair transplant cost, graft counts, Norwood stages, clinic choice, and SMP from Grafto.">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="{SITE_URL}/articles/">
+  <link rel="alternate" hreflang="en" href="{SITE_URL}/articles/?lang=en">
+  <link rel="alternate" hreflang="ru" href="{SITE_URL}/articles/?lang=ru">
+  <link rel="alternate" hreflang="x-default" href="{SITE_URL}/articles/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Hair Transplant and SMP Guides | Grafto">
   <meta property="og:description" content="Guides organized by real patient decisions: cost, grafts, Norwood scale, clinic choice, and SMP.">
   <meta property="og:url" content="{SITE_URL}/articles/">
   <meta property="og:image" content="{SITE_URL}/hero.png">
+  <script type="application/ld+json">{json_ld(web_page_schema)}</script>
+  <script type="application/ld+json">{json_ld(item_list_schema)}</script>
   <link rel="stylesheet" href="../base.css">
   <link rel="stylesheet" href="../style.css?v={STYLE_VERSION}">
   <link rel="icon" href="../logo.jpg" type="image/jpeg">
@@ -551,6 +631,7 @@ def index_template(articles: list[Article]) -> str:
 def update_sitemap(articles: list[Article]) -> None:
     sitemap_path = ROOT / "sitemap.xml"
     ET.register_namespace("", "http://www.sitemaps.org/schemas/sitemap/0.9")
+    ET.register_namespace("xhtml", "http://www.w3.org/1999/xhtml")
     tree = ET.parse(sitemap_path)
     root = tree.getroot()
     ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
@@ -563,8 +644,18 @@ def update_sitemap(articles: list[Article]) -> None:
         loc = node.find("sm:loc", ns)
         if loc is not None and (loc.text in url_set or "#" in (loc.text or "")):
             root.remove(node)
+        elif loc is not None and loc.text in {f"{SITE_URL}/", f"{SITE_URL}/?lang=ru"}:
+            lastmod = node.find("sm:lastmod", ns)
+            if lastmod is None:
+                lastmod = ET.SubElement(node, "{http://www.sitemaps.org/schemas/sitemap/0.9}lastmod")
+            lastmod.text = LASTMOD
     existing = {loc.text for loc in root.findall("sm:url/sm:loc", ns)}
-    today = date.today().isoformat()
+
+    article_by_url: dict[str, tuple[Article, str]] = {}
+    for article in articles:
+        article_by_url[f"{SITE_URL}/articles/en/{article.slug}/"] = (article, "en")
+        article_by_url[f"{SITE_URL}/articles/ru/{article.slug}/"] = (article, "ru")
+
     for url in urls:
         if url in existing:
             continue
@@ -572,11 +663,34 @@ def update_sitemap(articles: list[Article]) -> None:
         loc = ET.SubElement(node, "{http://www.sitemaps.org/schemas/sitemap/0.9}loc")
         loc.text = url
         lastmod = ET.SubElement(node, "{http://www.sitemaps.org/schemas/sitemap/0.9}lastmod")
-        lastmod.text = today
+        lastmod.text = LASTMOD
         changefreq = ET.SubElement(node, "{http://www.sitemaps.org/schemas/sitemap/0.9}changefreq")
         changefreq.text = "monthly"
         priority = ET.SubElement(node, "{http://www.sitemaps.org/schemas/sitemap/0.9}priority")
         priority.text = "0.7" if url.endswith("/articles/") else "0.6"
+        if url.endswith("/articles/"):
+            for hreflang, href in (
+                ("en", f"{SITE_URL}/articles/?lang=en"),
+                ("ru", f"{SITE_URL}/articles/?lang=ru"),
+                ("x-default", f"{SITE_URL}/articles/"),
+            ):
+                ET.SubElement(
+                    node,
+                    "{http://www.w3.org/1999/xhtml}link",
+                    {"rel": "alternate", "hreflang": hreflang, "href": href},
+                )
+        elif url in article_by_url:
+            article, _lang = article_by_url[url]
+            for hreflang, href in (
+                ("en", f"{SITE_URL}/articles/en/{article.slug}/"),
+                ("ru", f"{SITE_URL}/articles/ru/{article.slug}/"),
+                ("x-default", f"{SITE_URL}/articles/en/{article.slug}/"),
+            ):
+                ET.SubElement(
+                    node,
+                    "{http://www.w3.org/1999/xhtml}link",
+                    {"rel": "alternate", "hreflang": hreflang, "href": href},
+                )
     ET.indent(tree, space="  ")
     tree.write(sitemap_path, encoding="utf-8", xml_declaration=True)
 

@@ -3,7 +3,7 @@ Allow: /
 
 User-agent: Yandex
 Allow: /
-Clean-param: t&lang
+Clean-param: utm_source&utm_medium&utm_campaign&utm_term&utm_content&t&lang&gclid&yclid&fbclid&mc_cid&mc_eid
 
 User-agent: Googlebot
 Allow: /
