@@ -830,14 +830,16 @@ def index_template(articles: list[Article]) -> str:
     for key, cluster in CLUSTERS.items():
         cards = []
         for article in grouped[key]:
+            en_excerpt = excerpt(article.en_blocks)
+            ru_excerpt = excerpt(article.ru_blocks)
             cards.append(
                 f"""<div class="article-index-card">
           <span class="article-index-card__cluster" data-lang="en">{html.escape(cluster["en"])}</span>
           <span class="article-index-card__cluster" data-lang="ru" style="display:none">{html.escape(cluster["ru"])}</span>
           <a href="./en/{article.slug}/" data-lang="en"><strong>{html.escape(article.en_title)}</strong></a>
           <a href="./ru/{article.slug}/" data-lang="ru" style="display:none"><strong>{html.escape(article.ru_title)}</strong></a>
-          <span class="article-index-card__secondary" data-lang="en">{html.escape(article.ru_title)}</span>
-          <span class="article-index-card__secondary" data-lang="ru" style="display:none">{html.escape(article.en_title)}</span>
+          <span class="article-index-card__secondary" data-lang="en">{html.escape(en_excerpt)}</span>
+          <span class="article-index-card__secondary" data-lang="ru" style="display:none">{html.escape(ru_excerpt)}</span>
         </div>"""
             )
         sections.append(
