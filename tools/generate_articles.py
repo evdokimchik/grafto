@@ -22,7 +22,7 @@ DOCS = [
 SITE_URL = "https://start.grafto.hair"
 APP_URL = "https://apps.apple.com/app/grafto-hair-transplant-smp/id6759666757"
 STYLE_VERSION = "8"
-LASTMOD = "2026-05-03"
+LASTMOD = "2026-05-04"
 
 LEGACY_ARTICLE_CLUSTERS = {
     "fue": "grafts",
@@ -201,6 +201,182 @@ class Node:
 
 def clean(text: str) -> str:
     return " ".join(text.split())
+
+
+RU_PLAIN_REPLACEMENTS = [
+    (r"\bтрансплантация волос\b", "пересадка волос"),
+    (r"\bтрансплантации волос\b", "пересадки волос"),
+    (r"\bтрансплантацию волос\b", "пересадку волос"),
+    (r"\bтрансплантацией волос\b", "пересадкой волос"),
+    (r"\bтрансплантатами\b", "графтами"),
+    (r"\bтрансплантатов\b", "графтов"),
+    (r"\bтрансплантаты\b", "графты"),
+    (r"\bтрансплантат\b", "графт"),
+    (r"\bфолликулярных юнитов\b", "графтов"),
+    (r"\bфолликулярные юниты\b", "графты"),
+    (r"\bреципиентной зоны\b", "зоны пересадки"),
+    (r"\bреципиентной зоне\b", "зоне пересадки"),
+    (r"\bреципиентную зону\b", "зону пересадки"),
+    (r"\bреципиентная зона\b", "зона пересадки"),
+    (r"\bреципиентного участка\b", "участка пересадки"),
+    (r"\bреципиентный участок\b", "участок пересадки"),
+    (r"\bреципиентных участков\b", "участков, куда пересаживают волосы"),
+    (r"\bреципиентные участки\b", "участки, куда пересаживают волосы"),
+    (r"\bреципиентные каналы\b", "каналы для посадки графтов"),
+    (r"\bнативного скальпа\b", "собственной кожи головы"),
+    (r"\bнативные волосы\b", "свои волосы"),
+    (r"\bскальпа\b", "кожи головы"),
+    (r"\bскальп\b", "кожа головы"),
+    (r"\bпредоперационная\b", "предварительная"),
+    (r"\bпредоперационной\b", "предварительной"),
+    (r"\bпредоперационную\b", "предварительную"),
+    (r"\bпредоперационные\b", "предварительные"),
+    (r"\bпредоперационных\b", "предварительных"),
+    (r"\bпредоперационного\b", "предварительного"),
+    (r"\bпослеоперационного ухода\b", "ухода после операции"),
+    (r"\bпослеоперационный уход\b", "уход после операции"),
+    (r"\bпослеоперационное наблюдение\b", "наблюдение после операции"),
+    (r"\bпослеоперационные\b", "после операции"),
+    (r"\bпослеоперационных\b", "после операции"),
+    (r"\bпослеоперационном\b", "после операции"),
+    (r"\bклинический процесс\b", "медицинская консультация"),
+    (r"\bклинического опыта\b", "опыта работы с клиникой"),
+    (r"\bклинической оценки\b", "оценки врача"),
+    (r"\bклиническое обоснование\b", "медицинское объяснение"),
+    (r"\bклинически уместно\b", "подходит по медицинским причинам"),
+    (r"\bклинической честности\b", "честной работы клиники"),
+    (r"\bинтраоперационной техникой\b", "тем, как проходит сама операция"),
+    (r"\bнежелательных явлений\b", "осложнений"),
+    (r"\bоптимальным\b", "лучшим"),
+    (r"\bоптимальна\b", "лучше всего подходит"),
+    (r"\bоптимальны\b", "лучше всего подходят"),
+    (r"\bобусловленными\b", "связанными"),
+    (r"\bобусловлен\b", "связан"),
+    (r"\bобусловлена\b", "связана"),
+    (r"\bнадлежащего\b", "правильного"),
+    (r"\bнадлежащей\b", "правильной"),
+    (r"\bнадлежащем\b", "правильном"),
+    (r"\bнепрерывность\b", "постоянство"),
+    (r"\bнепропорционально связаны\b", "часто связаны"),
+    (r"\bмногофакторный характер\b", "зависит от многих факторов"),
+    (r"\bпоказатель выживаемости\b", "приживаемость"),
+    (r"\bжизнеспособность\b", "приживаемость"),
+    (r"\bконтаминации\b", "загрязнения"),
+    (r"\bавторитетных\b", "хороших"),
+    (r"\bавторитетный\b", "хороший"),
+    (r"\bустоявшихся\b", "проверенных"),
+    (r"\bпровайдер\b", "клиника"),
+    (r"\bпровайдера\b", "клинику"),
+    (r"\bпровайдеров\b", "клиник"),
+    (r"\bпровайдеры\b", "клиники"),
+    (r"\bпациенты должны\b", "пациентам стоит"),
+    (r"\bпациентам следует\b", "пациентам стоит"),
+    (r"\bследует\b", "стоит"),
+    (r"\bв конечном счёте\b", "в итоге"),
+    (r"\bв значительной степени\b", "сильно"),
+    (r"\bв ряде случаев\b", "иногда"),
+    (r"\bкак правило\b", "обычно"),
+    (r"\bсоответственно\b", "поэтому"),
+    (r"\bданном этапе\b", "этой стадии"),
+    (r"\bданного этапа\b", "этой стадии"),
+    (r"\bпринимая во внимание\b", "учитывая"),
+    (r"\bкожа головы-микропигментация\b", "SMP"),
+    (r"\bв пересадки волос\b", "при пересадке волос"),
+    (r"\bпри стандартной пересадки волос\b", "при стандартной пересадке волос"),
+]
+
+EN_PLAIN_REPLACEMENTS = [
+    (r"\bhair transplantation\b", "hair transplant"),
+    (r"\btransplantation\b", "transplant"),
+    (r"\bfollicular units\b", "grafts"),
+    (r"\brecipient area\b", "area where hair is placed"),
+    (r"\brecipient zone\b", "area where hair is placed"),
+    (r"\brecipient sites\b", "sites where grafts are placed"),
+    (r"\bnative scalp\b", "original scalp"),
+    (r"\bnative hair\b", "existing hair"),
+    (r"\bpreoperative\b", "before-surgery"),
+    (r"\bpre-operative\b", "before-surgery"),
+    (r"\bpostoperative\b", "after-surgery"),
+    (r"\bpost-operative\b", "after-surgery"),
+    (r"\bintraoperative\b", "during-surgery"),
+    (r"\bintra-operative\b", "during-surgery"),
+    (r"\bclinical process\b", "medical consultation"),
+    (r"\bclinical assessment\b", "doctor's assessment"),
+    (r"\bclinical justification\b", "medical reason"),
+    (r"\bclinically appropriate\b", "medically appropriate"),
+    (r"\bprovider\b", "clinic"),
+    (r"\bproviders\b", "clinics"),
+    (r"\bmultifactorial\b", "affected by many things"),
+    (r"\bgraft survival rate\b", "graft survival"),
+    (r"\bviability\b", "survival"),
+    (r"\bcontamination\b", "infection risk"),
+    (r"\badverse events\b", "complications"),
+    (r"\bsuboptimal\b", "poor"),
+    (r"\bsubstantially\b", "much"),
+    (r"\bsignificantly\b", "noticeably"),
+    (r"\bin many cases\b", "often"),
+    (r"\bas a result\b", "so"),
+    (r"\btherefore\b", "so"),
+    (r"\bnevertheless\b", "still"),
+    (r"\bpatients should\b", "you should"),
+    (r"\bpatients must\b", "you should"),
+    (r"\bpatients need to\b", "you need to"),
+]
+
+
+def apply_replacements(text: str, replacements: list[tuple[str, str]]) -> str:
+    for pattern, replacement in replacements:
+        text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
+    return text
+
+
+def soften_sentence_breaks(text: str, lang: str) -> str:
+    if len(text) < 230:
+        return text
+    if lang == "ru":
+        text = re.sub(r", однако ", ". Но ", text, flags=re.IGNORECASE)
+        text = re.sub(r", поэтому ", ". Поэтому ", text, flags=re.IGNORECASE)
+        text = re.sub(r", потому что ", ". Потому что ", text, flags=re.IGNORECASE)
+        text = re.sub(r", что означает: ", ". Это значит: ", text, flags=re.IGNORECASE)
+    else:
+        text = re.sub(r", however,? ", ". But ", text, flags=re.IGNORECASE)
+        text = re.sub(r", which means ", ". This means ", text, flags=re.IGNORECASE)
+        text = re.sub(r", because ", ". Because ", text, flags=re.IGNORECASE)
+    return text
+
+
+def plain_language_text(text: str, lang: str) -> str:
+    replacements = RU_PLAIN_REPLACEMENTS if lang == "ru" else EN_PLAIN_REPLACEMENTS
+    text = apply_replacements(text, replacements)
+    text = soften_sentence_breaks(text, lang)
+    text = re.sub(r"\s+", " ", text).strip()
+    text = text.replace("обычно,", "обычно")
+    text = text.replace("typically,", "typically")
+    text = text.replace("infection risk risks", "infection risks")
+    text = text.replace("after-surgery care", "care after surgery")
+    text = text.replace("after-surgery follow-up", "follow-up after surgery")
+    text = text.replace("по пересадки волос", "по пересадке волос")
+    text = text.replace("при пересадки волос", "при пересадке волос")
+    text = text.replace("двусторонний медицинская консультация", "двусторонняя медицинская консультация")
+    text = text.replace("центрального кожи головы", "центральной части кожи головы")
+    text = text.replace("другого клинику", "другой клиники")
+    text = text.replace("одного клинику", "одной клиники")
+    text = text.replace("сторонних клиник медицинского финансирования", "сторонние сервисы медицинского финансирования")
+    text = re.sub(r"\.\s+([а-я])", lambda m: ". " + m.group(1).upper(), text)
+    text = re.sub(r"\.\s+(?!https?://)([a-z])", lambda m: ". " + m.group(1).upper(), text)
+    if text and text[0].isalpha():
+        text = text[0].upper() + text[1:]
+    return text
+
+
+def plain_language_blocks(blocks: list[Block], lang: str) -> list[Block]:
+    plain: list[Block] = []
+    for block in blocks:
+        if block.style.startswith("Heading"):
+            plain.append(block)
+        else:
+            plain.append(Block(plain_language_text(block.text, lang), block.style))
+    return plain
 
 
 def slugify(text: str) -> str:
@@ -431,6 +607,91 @@ def render_blocks(blocks: list[Block]) -> str:
     return "\n".join(out)
 
 
+def plain_summary_items(article: Article, lang: str) -> list[str]:
+    title = article.ru_title if lang == "ru" else article.en_title
+    if lang == "ru":
+        if article.cluster == "cost":
+            return [
+                f"Эта страница простыми словами объясняет тему: {title}.",
+                "Главные факторы цены: количество графтов, метод, участие врача, уровень клиники и то, что входит в пакет.",
+                "Не сравнивайте только итоговую сумму. Сравнивайте план, врача, поддержку после операции и прозрачность цены.",
+                "Перед оплатой попросите письменный план: сколько графтов, почему столько, кто делает процедуру и какие расходы могут быть отдельно.",
+            ]
+        if article.cluster == "grafts":
+            return [
+                "Графты - это маленькие группы волос, которые берут из донорской зоны и пересаживают туда, где волос не хватает.",
+                "Нужное количество графтов зависит не от желания получить максимум, а от зоны потери, донорского запаса и долгосрочного плана.",
+                "Слишком много графтов за один раз может повредить донорскую зону. Это один из главных рисков, о котором стоит спросить заранее.",
+                "На консультации просите объяснить не только число графтов, но и почему это число безопасно именно для вас.",
+            ]
+        if article.cluster == "norwood":
+            return [
+                "Шкала Норвуда помогает примерно понять стадию мужского облысения, но не заменяет консультацию врача.",
+                "Одна и та же стадия может выглядеть по-разному у разных людей: важны возраст, донорская зона, толщина волос и скорость выпадения.",
+                "Чем выше стадия, тем важнее не обещать слишком много за один сеанс и заранее думать о будущем выпадении.",
+                "Используйте статью как подготовку: сначала оцените стадию, потом обсуждайте графты, цену и реалистичный результат.",
+            ]
+        if article.cluster == "clinic":
+            return [
+                "Главная задача - понять, работает ли клиника в ваших интересах, а не просто продает процедуру.",
+                "Хорошая клиника объясняет ограничения, показывает реальные результаты, называет врача и не давит срочными скидками.",
+                "Плохой знак - обещания большого числа графтов без осмотра донорской зоны и без понятного плана.",
+                "Сохраните вопросы из статьи и используйте их на консультации, чтобы сравнивать клиники спокойно и по одним критериям.",
+            ]
+        return [
+            "SMP - это не пересадка волос, а имитация коротких волосков с помощью пигмента в коже головы.",
+            "Метод может помочь при шрамах, diffuse thinning, неудачной пересадке или когда пересадка не подходит.",
+            "Результат сильно зависит от мастера, цвета пигмента, формы линии роста и того, как заживает кожа.",
+            "Перед процедурой уточните количество сеансов, стоимость коррекций, примеры работ и правила ухода после SMP.",
+        ]
+
+    if article.cluster == "cost":
+        return [
+            f"This page explains the topic in practical terms: {title}.",
+            "The main price drivers are graft count, method, surgeon involvement, clinic quality, and what the package includes.",
+            "Do not compare only the final number. Compare the plan, the doctor, aftercare, and whether the quote is transparent.",
+            "Before paying, ask for a written plan: graft count, why that number, who performs the procedure, and what may cost extra.",
+        ]
+    if article.cluster == "grafts":
+        return [
+            "Grafts are small natural groups of hairs moved from the donor area to the thinning area.",
+            "The right graft count depends on the area being treated, donor supply, hair quality, and long-term planning.",
+            "More grafts are not always better. Taking too many can damage the donor area and limit future options.",
+            "Use the article to ask why a suggested number is safe for you, not just whether it sounds impressive.",
+        ]
+    if article.cluster == "norwood":
+        return [
+            "The Norwood scale is a quick way to describe male hair loss stage, but it is not a full medical plan.",
+            "The same stage can look different depending on age, donor density, hair thickness, and speed of loss.",
+            "Higher stages need more careful planning because donor hair is limited and future loss still matters.",
+            "Use this guide to prepare for a realistic conversation about grafts, cost, and expected result.",
+        ]
+    if article.cluster == "clinic":
+        return [
+            "The goal is to judge whether a clinic is helping you make a safe decision or simply selling a procedure.",
+            "A good clinic explains limits, shows real results, names the doctor, and avoids pressure tactics.",
+            "A warning sign is a large graft promise without examining the donor area or giving a clear plan.",
+            "Use the questions in this article to compare clinics calmly, using the same criteria each time.",
+        ]
+    return [
+        "SMP is not a hair transplant. It creates the look of tiny shaved hairs using pigment in the scalp.",
+        "It can help with scars, diffuse thinning, failed transplants, or cases where surgery is not a good fit.",
+        "The result depends heavily on the practitioner, pigment color, hairline design, and healing.",
+        "Before booking, ask about sessions, touch-ups, pricing, real examples, and aftercare rules.",
+    ]
+
+
+def render_plain_summary(article: Article, lang: str) -> str:
+    label = "Простыми словами" if lang == "ru" else "In plain language"
+    items = "\n".join(f"        <li>{html.escape(item)}</li>" for item in plain_summary_items(article, lang))
+    return f"""<section class="article-plain-summary" aria-label="{html.escape(label)}">
+        <h2>{html.escape(label)}</h2>
+        <ul>
+{items}
+        </ul>
+      </section>"""
+
+
 def excerpt(blocks: list[Block]) -> str:
     for block in blocks:
         if block.style != "List Bullet" and not looks_like_heading(block.text, block.style):
@@ -547,6 +808,7 @@ def page_template(article: Article, lang: str) -> str:
       <h1>{html.escape(title)}</h1>
       <p class="article-summary">{html.escape(desc)}</p>
       <div class="article-disclaimer">{html.escape(disclaimer)}</div>
+      {render_plain_summary(article, lang)}
       {render_blocks(blocks)}
       <div class="article-final-cta">
         <p>{html.escape(cta)}</p>
@@ -806,6 +1068,8 @@ def main() -> None:
             article.en_blocks = ARTICLE_OVERRIDES[(article.slug, "en")]
         if (article.slug, "ru") in ARTICLE_OVERRIDES:
             article.ru_blocks = ARTICLE_OVERRIDES[(article.slug, "ru")]
+        article.en_blocks = plain_language_blocks(article.en_blocks, "en")
+        article.ru_blocks = plain_language_blocks(article.ru_blocks, "ru")
 
     out_dir = ROOT / "articles"
     if out_dir.exists():
