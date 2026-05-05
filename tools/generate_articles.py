@@ -21,8 +21,8 @@ DOCS = [
 ]
 SITE_URL = "https://start.grafto.hair"
 APP_URL = "https://apps.apple.com/app/grafto-hair-transplant-smp/id6759666757"
-STYLE_VERSION = "8"
-LASTMOD = "2026-05-04"
+STYLE_VERSION = "9"
+LASTMOD = "2026-05-05"
 
 LEGACY_ARTICLE_CLUSTERS = {
     "fue": "grafts",

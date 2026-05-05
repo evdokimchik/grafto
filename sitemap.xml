@@ -2,48 +2,52 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://start.grafto.hair/</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://start.grafto.hair/" />
     <xhtml:link rel="alternate" hreflang="en-US" href="https://start.grafto.hair/" />
-    <xhtml:link rel="alternate" hreflang="en-CA" href="https://start.grafto.hair/" />
     <xhtml:link rel="alternate" hreflang="en-GB" href="https://start.grafto.hair/" />
-    <xhtml:link rel="alternate" hreflang="en-IE" href="https://start.grafto.hair/" />
-    <xhtml:link rel="alternate" hreflang="en-AU" href="https://start.grafto.hair/" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://start.grafto.hair/" />
-    <xhtml:link rel="alternate" hreflang="de-DE" href="https://start.grafto.hair/" />
-    <xhtml:link rel="alternate" hreflang="de-AT" href="https://start.grafto.hair/" />
-    <xhtml:link rel="alternate" hreflang="de-CH" href="https://start.grafto.hair/" />
-    <xhtml:link rel="alternate" hreflang="sv" href="https://start.grafto.hair/" />
-    <xhtml:link rel="alternate" hreflang="sv-SE" href="https://start.grafto.hair/" />
-    <xhtml:link rel="alternate" hreflang="nb" href="https://start.grafto.hair/" />
-    <xhtml:link rel="alternate" hreflang="nb-NO" href="https://start.grafto.hair/" />
-    <xhtml:link rel="alternate" hreflang="da" href="https://start.grafto.hair/" />
-    <xhtml:link rel="alternate" hreflang="da-DK" href="https://start.grafto.hair/" />
-    <xhtml:link rel="alternate" hreflang="nl" href="https://start.grafto.hair/" />
-    <xhtml:link rel="alternate" hreflang="nl-NL" href="https://start.grafto.hair/" />
-    <xhtml:link rel="alternate" hreflang="nl-BE" href="https://start.grafto.hair/" />
-    <xhtml:link rel="alternate" hreflang="fr-BE" href="https://start.grafto.hair/" />
     <xhtml:link rel="alternate" hreflang="ru" href="https://start.grafto.hair/?lang=ru" />
     <xhtml:link rel="alternate" hreflang="ru-RU" href="https://start.grafto.hair/?lang=ru" />
     <xhtml:link rel="alternate" hreflang="ru-BY" href="https://start.grafto.hair/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="ru-KZ" href="https://start.grafto.hair/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="be" href="https://start.grafto.hair/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="be-BY" href="https://start.grafto.hair/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="kk" href="https://start.grafto.hair/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="kk-KZ" href="https://start.grafto.hair/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://start.grafto.hair/?lang=ru" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://start.grafto.hair/" />
   </url>
   <url>
     <loc>https://start.grafto.hair/?lang=ru</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://start.grafto.hair/" />
     <xhtml:link rel="alternate" hreflang="ru" href="https://start.grafto.hair/?lang=ru" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://start.grafto.hair/" />
+  </url>
+  <url>
+    <loc>https://start.grafto.hair/trust/clinic-reviews/</loc>
+    <lastmod>2026-05-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://start.grafto.hair/trust/clinic-reviews/?lang=en" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://start.grafto.hair/trust/clinic-reviews/?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://start.grafto.hair/trust/clinic-reviews/" />
+  </url>
+  <url>
+    <loc>https://start.grafto.hair/trust/estimates/</loc>
+    <lastmod>2026-05-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://start.grafto.hair/trust/estimates/?lang=en" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://start.grafto.hair/trust/estimates/?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://start.grafto.hair/trust/estimates/" />
+  </url>
+  <url>
+    <loc>https://start.grafto.hair/trust/limitations/</loc>
+    <lastmod>2026-05-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://start.grafto.hair/trust/limitations/?lang=en" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://start.grafto.hair/trust/limitations/?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://start.grafto.hair/trust/limitations/" />
   </url>
   <url>
     <loc>https://start.grafto.hair/articles/</loc>

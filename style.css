@@ -262,7 +262,8 @@
   min-width: 0;
 }
 
-.hero__illustration {
+.hero__illustration,
+.hero__product {
   flex: 0 0 auto;
   max-width: 420px;
 }
@@ -294,8 +295,59 @@
     max-width: 320px;
     margin-inline: auto;
   }
+  .hero__product {
+    max-width: min(360px, 100%);
+    margin-inline: auto;
+  }
   .hero__actions {
     justify-content: center;
+  }
+}
+
+.app-shot-stack {
+  position: relative;
+  width: min(420px, 88vw);
+  min-height: 580px;
+}
+
+.app-shot {
+  position: absolute;
+  width: 48%;
+  max-width: 210px;
+  height: auto;
+  border-radius: 26px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+}
+
+.app-shot--primary {
+  left: 26%;
+  top: 0;
+  z-index: 3;
+}
+
+.app-shot--secondary {
+  left: 0;
+  top: 74px;
+  z-index: 2;
+  transform: rotate(-4deg);
+}
+
+.app-shot--tertiary {
+  right: 0;
+  top: 104px;
+  z-index: 1;
+  transform: rotate(4deg);
+}
+
+@media (max-width: 768px) {
+  .app-shot-stack {
+    min-height: 470px;
+  }
+  .app-shot {
+    width: 45%;
+    border-radius: 20px;
   }
 }
 
@@ -316,7 +368,7 @@
   font-family: var(--font-display);
   font-size: var(--text-2xl);
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: 0;
   line-height: 1.1;
   max-width: 18ch;
   margin-bottom: var(--space-4);
@@ -453,6 +505,100 @@
   padding: var(--space-5);
 }
 
+.trust-item__link {
+  display: inline-flex;
+  margin-top: var(--space-4);
+  color: var(--color-primary);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.trust-item__link:hover {
+  text-decoration: underline;
+}
+
+.screenshot-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.screenshot-grid img {
+  width: 100%;
+  height: auto;
+  border-radius: 24px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
+}
+
+.screenshot-grid img:nth-child(even) {
+  margin-top: var(--space-8);
+}
+
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.testimonial-card {
+  margin: 0;
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.testimonial-card__stars {
+  margin-bottom: var(--space-3);
+  color: var(--color-primary);
+  font-size: var(--text-sm);
+  letter-spacing: 0;
+}
+
+.testimonial-card blockquote {
+  margin: 0 0 var(--space-4);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  line-height: 1.65;
+}
+
+.testimonial-card figcaption {
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  font-weight: 700;
+}
+
+.transparency-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin: var(--space-8) 0;
+}
+
+.transparency-card {
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.transparency-card h2 {
+  margin-top: 0;
+}
+
+.transparency-note {
+  margin-top: var(--space-8);
+  padding: var(--space-5);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  background: var(--color-primary-light);
+}
+
 .cluster-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -482,7 +628,12 @@
 @media (max-width: 900px) {
   .decision-grid,
   .trust-list,
+  .testimonial-grid,
+  .transparency-grid,
   .cluster-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .screenshot-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -490,8 +641,20 @@
 @media (max-width: 560px) {
   .decision-grid,
   .trust-list,
+  .testimonial-grid,
+  .transparency-grid,
   .cluster-grid {
     grid-template-columns: 1fr;
+  }
+  .screenshot-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+  .screenshot-grid img {
+    border-radius: 18px;
+  }
+  .screenshot-grid img:nth-child(even) {
+    margin-top: var(--space-5);
   }
 }
 
