@@ -21,7 +21,7 @@ DOCS = [
 ]
 SITE_URL = "https://start.grafto.hair"
 APP_URL = "https://apps.apple.com/app/grafto-hair-transplant-smp/id6759666757"
-STYLE_VERSION = "10"
+STYLE_VERSION = "12"
 LASTMOD = "2026-05-05"
 
 LEGACY_ARTICLE_CLUSTERS = {
@@ -692,6 +692,56 @@ def render_plain_summary(article: Article, lang: str) -> str:
       </section>"""
 
 
+def faq_items(title: str, desc: str, lang: str) -> list[tuple[str, str]]:
+    clean_title = title.rstrip(" ?")
+    if lang == "ru":
+        return [
+            (
+                f"Короткий ответ по теме «{clean_title}»?",
+                f"{desc} Используйте этот материал как подготовку к разговору с квалифицированным специалистом.",
+            ),
+            (
+                "Как Grafto помогает с этим решением?",
+                "Grafto помогает оценить стадию, подготовить диапазон графтов и стоимости, сравнить пересадку с SMP, сохранить заметки и собрать вопросы к клинике.",
+            ),
+            (
+                "Это медицинская рекомендация?",
+                "Нет. Grafto дает образовательную информацию и помогает подготовиться. Итоговый диагноз, план лечения и решение об операции нужно принимать с квалифицированным специалистом.",
+            ),
+        ]
+    return [
+        (
+            f"What is the short answer about {clean_title}?",
+            f"{desc} Use this guide as educational preparation before speaking with a qualified clinician.",
+        ),
+        (
+            "How can Grafto help with this decision?",
+            "Grafto helps you assess your stage, estimate graft and cost ranges, compare transplant and SMP options, save notes, and prepare clinic questions.",
+        ),
+        (
+            "Is this medical advice?",
+            "No. Grafto provides educational decision support. Final diagnosis, treatment planning, and surgery decisions should be made with a qualified clinician.",
+        ),
+    ]
+
+
+def render_faq_section(title: str, desc: str, lang: str) -> str:
+    items = faq_items(title, desc, lang)
+    details = []
+    for index, (question, answer) in enumerate(items):
+        open_attr = " open" if index == 0 else ""
+        details.append(
+            f"""        <details{open_attr}>
+          <summary>{html.escape(question)}</summary>
+          <p>{html.escape(answer)}</p>
+        </details>"""
+        )
+    return f"""<section class="article-faq" aria-label="FAQ">
+        <h2>FAQ</h2>
+{chr(10).join(details)}
+      </section>"""
+
+
 def excerpt(blocks: list[Block]) -> str:
     for block in blocks:
         if block.style != "List Bullet" and not looks_like_heading(block.text, block.style):
@@ -719,6 +769,7 @@ def page_template(article: Article, lang: str) -> str:
     cta = cluster[f"cta_{lang}"]
     other_lang = "ru" if lang == "en" else "en"
     desc = excerpt(blocks)
+    answer_summary = " ".join(plain_summary_items(article, lang)[:2])
     canonical = f"{SITE_URL}/articles/{lang}/{article.slug}/"
     alternate = f"{SITE_URL}/articles/{other_lang}/{article.slug}/"
     back_label = "All guides" if lang == "en" else "Все материалы"
@@ -761,6 +812,19 @@ def page_template(article: Article, lang: str) -> str:
             {"@type": "ListItem", "position": 3, "name": title, "item": canonical},
         ],
     }
+    faq_schema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": question,
+                "acceptedAnswer": {"@type": "Answer", "text": answer},
+            }
+            for question, answer in faq_items(title, answer_summary, lang)
+        ],
+    }
+    quick_label = "Короткий ответ" if lang == "ru" else "Quick answer"
 
     return f"""<!DOCTYPE html>
 <html lang="{lang}" data-theme="light">
@@ -786,6 +850,7 @@ def page_template(article: Article, lang: str) -> str:
   <meta name="twitter:card" content="summary_large_image">
   <script type="application/ld+json">{json_ld(article_schema)}</script>
   <script type="application/ld+json">{json_ld(breadcrumb_schema)}</script>
+  <script type="application/ld+json">{json_ld(faq_schema)}</script>
   <link rel="stylesheet" href="../../../base.css">
   <link rel="stylesheet" href="../../../style.css?v={STYLE_VERSION}">
   <link rel="icon" href="../../../logo.jpg" type="image/jpeg">
@@ -806,10 +871,11 @@ def page_template(article: Article, lang: str) -> str:
     <article class="article-content">
       <p class="article-eyebrow">{cluster_intro}: {html.escape(cluster_label)}</p>
       <h1>{html.escape(title)}</h1>
-      <p class="article-summary">{html.escape(desc)}</p>
+      <p class="article-summary"><strong>{html.escape(quick_label)}:</strong> {html.escape(answer_summary)}</p>
       <div class="article-disclaimer">{html.escape(disclaimer)}</div>
       {render_plain_summary(article, lang)}
       {render_blocks(blocks)}
+      {render_faq_section(title, answer_summary, lang)}
       <div class="article-final-cta">
         <p>{html.escape(cta)}</p>
         <a href="{APP_URL}" target="_blank" rel="noopener noreferrer" class="btn btn--primary">{app_label}</a>

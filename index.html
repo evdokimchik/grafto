@@ -73,7 +73,7 @@
   "url": "https://start.grafto.hair/",
   "logo": "https://start.grafto.hair/logo.jpg",
   "image": "https://start.grafto.hair/hero.png",
-  "description": "Hair transplant and scalp micropigmentation (SMP) guide: expert articles and mobile app. Covering FUE, FUT, DHI, cost comparison, clinic selection, preparation and recovery.",
+  "description": "Hair restoration decision-support platform and mobile app for hair transplant and scalp micropigmentation (SMP). Grafto helps users understand stage, graft ranges, cost expectations, clinic questions, and SMP tradeoffs before booking a consultation.",
   "sameAs": [
     "https://apps.apple.com/app/grafto-hair-transplant-smp/id6759666757"
   ],
@@ -111,6 +111,44 @@
     "@type": "Organization",
     "name": "Grafto",
     "url": "https://start.grafto.hair/"
+  }
+}
+</script>
+
+<!-- Structured data: Grafto mobile application -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["MobileApplication", "SoftwareApplication"],
+  "@id": "https://start.grafto.hair/app/#grafto-app",
+  "name": "Grafto",
+  "alternateName": "Grafto: Hair Transplant & SMP",
+  "url": "https://start.grafto.hair/app/",
+  "downloadUrl": "https://apps.apple.com/app/grafto-hair-transplant-smp/id6759666757",
+  "operatingSystem": "iOS",
+  "applicationCategory": "HealthApplication",
+  "applicationSubCategory": "Hair restoration decision support",
+  "description": "Grafto helps people considering a hair transplant or SMP assess hair loss stage, estimate realistic graft and cost ranges, compare treatment options, prepare clinic questions, save notes, and learn from patient stories.",
+  "featureList": [
+    "Visual hair loss stage assessment",
+    "Graft range and cost estimate preparation",
+    "Hair transplant versus SMP comparison",
+    "Clinic comparison and consultation checklist",
+    "Notes and saved preparation materials",
+    "Patient stories and community context"
+  ],
+  "inLanguage": ["en", "ru"],
+  "isAccessibleForFree": true,
+  "publisher": {
+    "@type": "Organization",
+    "name": "Grafto",
+    "url": "https://start.grafto.hair/"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
   }
 }
 </script>
@@ -185,7 +223,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="./base.css">
-<link rel="stylesheet" href="./style.css?v=11">
+<link rel="stylesheet" href="./style.css?v=12">
   <link rel="icon" href="./logo.jpg" type="image/jpeg">
 
   <!--
@@ -1493,6 +1531,8 @@
         <a href="mailto:hello@grafto.hair" class="footer__email">hello@grafto.hair</a>
       </div>
       <div class="footer__links">
+        <a href="./app/?lang=en" class="footer__link" data-lang="en">Grafto App</a>
+        <a href="./app/?lang=ru" class="footer__link" data-lang="ru" style="display:none">Приложение Grafto</a>
         <a href="./trust/clinic-reviews/?lang=en" class="footer__link" data-lang="en">Clinic Review Process</a>
         <a href="./trust/clinic-reviews/?lang=ru" class="footer__link" data-lang="ru" style="display:none">Проверка клиник</a>
         <a href="./trust/limitations/?lang=en" class="footer__link" data-lang="en">Limitations</a>

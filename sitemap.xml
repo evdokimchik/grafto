@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://start.grafto.hair/</loc>
-    <lastmod>2026-05-05</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://start.grafto.hair/" />
@@ -15,12 +15,21 @@
   </url>
   <url>
     <loc>https://start.grafto.hair/?lang=ru</loc>
-    <lastmod>2026-05-05</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://start.grafto.hair/" />
     <xhtml:link rel="alternate" hreflang="ru" href="https://start.grafto.hair/?lang=ru" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://start.grafto.hair/" />
+  </url>
+  <url>
+    <loc>https://start.grafto.hair/app/</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://start.grafto.hair/app/?lang=en" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://start.grafto.hair/app/?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://start.grafto.hair/app/" />
   </url>
   <url>
     <loc>https://start.grafto.hair/trust/clinic-reviews/</loc>
@@ -867,5 +876,23 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://start.grafto.hair/articles/en/realistic-expectations-from-a-hair-transplant/" />
     <xhtml:link rel="alternate" hreflang="ru" href="https://start.grafto.hair/articles/ru/realistic-expectations-from-a-hair-transplant/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://start.grafto.hair/articles/en/realistic-expectations-from-a-hair-transplant/" />
+  </url>
+  <url>
+    <loc>https://start.grafto.hair/articles/en/best-apps-for-hair-transplant/</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://start.grafto.hair/articles/en/best-apps-for-hair-transplant/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://start.grafto.hair/articles/ru/best-apps-for-hair-transplant/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://start.grafto.hair/articles/en/best-apps-for-hair-transplant/" />
+  </url>
+  <url>
+    <loc>https://start.grafto.hair/articles/ru/best-apps-for-hair-transplant/</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://start.grafto.hair/articles/en/best-apps-for-hair-transplant/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://start.grafto.hair/articles/ru/best-apps-for-hair-transplant/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://start.grafto.hair/articles/en/best-apps-for-hair-transplant/" />
   </url>
 </urlset>
