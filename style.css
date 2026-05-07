@@ -537,10 +537,6 @@
   box-shadow: var(--shadow-md);
 }
 
-.screenshot-grid img:nth-child(even) {
-  margin-top: var(--space-8);
-}
-
 .testimonial-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -666,9 +662,6 @@
   }
   .screenshot-grid img {
     border-radius: 18px;
-  }
-  .screenshot-grid img:nth-child(even) {
-    margin-top: var(--space-5);
   }
 }
 
