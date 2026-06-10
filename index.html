@@ -1557,6 +1557,10 @@
     const langs = (navigator.languages && navigator.languages.length)
       ? navigator.languages
       : [navigator.language || navigator.userLanguage || 'en'];
+    try {
+      const intlLocale = Intl.DateTimeFormat().resolvedOptions().locale;
+      if (intlLocale) langs.push(intlLocale);
+    } catch (e) {}
     for (const l of langs) {
       const raw = (l || '').toLowerCase();
       const code = raw.slice(0, 2);
@@ -1573,13 +1577,8 @@
       const urlLang = new URLSearchParams(window.location.search).get('lang');
       if (urlLang === 'ru' || urlLang === 'en') return urlLang;
     } catch (e) {}
-    // 2) user-selected preference from the language toggle
-    try {
-      const saved = localStorage.getItem(LANG_KEY);
-      const manual = localStorage.getItem(LANG_MANUAL_KEY);
-      if (manual === '1' && (saved === 'ru' || saved === 'en')) return saved;
-    } catch (e) {}
-    // 3) device/browser language: Russian for Russian-speaking devices, English for everyone else
+    // 2) device/browser language: Russian for Russian-speaking devices, English for everyone else.
+    // Do not let an old saved toggle override a Russian device on a fresh visit.
     return browserLang();
   }
 

@@ -6,6 +6,10 @@
     const langs = navigator.languages && navigator.languages.length
       ? navigator.languages
       : [navigator.language || 'en'];
+    try {
+      const intlLocale = Intl.DateTimeFormat().resolvedOptions().locale;
+      if (intlLocale) langs.push(intlLocale);
+    } catch (e) {}
     return langs.some(l => /^(ru|be|uk|kk|ky)/i.test(l || '')) ? 'ru' : 'en';
   }
 
@@ -13,11 +17,6 @@
     const params = new URLSearchParams(window.location.search);
     const urlLang = params.get('lang');
     if (urlLang === 'ru' || urlLang === 'en') return urlLang;
-    try {
-      const saved = localStorage.getItem(LANG_KEY);
-      const manual = localStorage.getItem(LANG_MANUAL_KEY);
-      if (manual === '1' && (saved === 'ru' || saved === 'en')) return saved;
-    } catch (e) {}
     return browserLang();
   }
 
