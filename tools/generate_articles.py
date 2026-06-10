@@ -1006,6 +1006,10 @@ def index_template(articles: list[Article]) -> str:
       const langs = (navigator.languages && navigator.languages.length)
         ? navigator.languages
         : [navigator.language || navigator.userLanguage || 'en'];
+      try {{
+        const intlLocale = Intl.DateTimeFormat().resolvedOptions().locale;
+        if (intlLocale) langs.push(intlLocale);
+      }} catch (e) {{}}
       for (const l of langs) {{
         const raw = (l || '').toLowerCase();
         const code = raw.slice(0, 2);
@@ -1019,11 +1023,6 @@ def index_template(articles: list[Article]) -> str:
       try {{
         const urlLang = new URLSearchParams(window.location.search).get('lang');
         if (urlLang === 'ru' || urlLang === 'en') return urlLang;
-      }} catch (e) {{}}
-      try {{
-        const saved = localStorage.getItem(LANG_KEY);
-        const manual = localStorage.getItem(LANG_MANUAL_KEY);
-        if (manual === '1' && (saved === 'ru' || saved === 'en')) return saved;
       }} catch (e) {{}}
       return browserLang();
     }}

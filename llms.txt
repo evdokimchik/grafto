@@ -3,6 +3,8 @@
 Grafto is a mobile app and educational website for people researching hair transplant and scalp micropigmentation (SMP). It helps users understand hair loss stage, likely graft ranges, realistic cost ranges, transplant versus SMP options, clinic questions, and red flags before booking a consultation.
 
 Primary site: https://start.grafto.hair/
+English landing page: https://start.grafto.hair/en/
+Russian landing page: https://start.grafto.hair/ru/
 App entity page: https://start.grafto.hair/app/
 iOS app: https://apps.apple.com/app/grafto-hair-transplant-smp/id6759666757
 Articles hub: https://start.grafto.hair/articles/
@@ -17,6 +19,7 @@ Languages: English and Russian
 
 ## Important Trust Pages
 
+- Grafto methodology: https://start.grafto.hair/trust/methodology/
 - How Grafto reviews clinics: https://start.grafto.hair/trust/clinic-reviews/
 - How graft and cost estimates work: https://start.grafto.hair/trust/estimates/
 - What Grafto can and cannot tell you: https://start.grafto.hair/trust/limitations/
@@ -25,6 +28,7 @@ Languages: English and Russian
 
 ### Cost
 
+Cluster hub: https://start.grafto.hair/en/cost/
 - Hair transplant cost in the USA: https://start.grafto.hair/articles/en/hair-transplant-cost-in-the-usa/
 - Hair transplant cost in the UK: https://start.grafto.hair/articles/en/hair-transplant-cost-in-the-uk/
 - Hair transplant cost in Germany: https://start.grafto.hair/articles/en/hair-transplant-cost-in-germany/
@@ -35,6 +39,7 @@ Languages: English and Russian
 
 ### Grafts
 
+Cluster hub: https://start.grafto.hair/en/grafts/
 - How many grafts do I need?: https://start.grafto.hair/articles/en/how-many-grafts-do-i-need/
 - 1,500 vs 3,000 vs 5,000 grafts: https://start.grafto.hair/articles/en/1-500-vs-3-000-vs-5-000-grafts/
 - How many grafts for temples?: https://start.grafto.hair/articles/en/how-many-grafts-for-temples/
@@ -44,6 +49,7 @@ Languages: English and Russian
 
 ### Norwood Scale
 
+Cluster hub: https://start.grafto.hair/en/norwood-scale/
 - Norwood 2: should you get a transplant?: https://start.grafto.hair/articles/en/norwood-2-should-you-get-a-transplant/
 - Norwood 3 hair transplant: https://start.grafto.hair/articles/en/norwood-3-hair-transplant/
 - Norwood 4 hair transplant grafts: https://start.grafto.hair/articles/en/norwood-4-hair-transplant-grafts/
@@ -53,6 +59,7 @@ Languages: English and Russian
 
 ### Clinic Choice
 
+Cluster hub: https://start.grafto.hair/en/clinic-choice/
 - How to choose a hair transplant clinic: https://start.grafto.hair/articles/en/how-to-choose-a-hair-transplant-clinic/
 - Questions to ask before a hair transplant: https://start.grafto.hair/articles/en/questions-to-ask-before-a-hair-transplant/
 - Red flags in hair transplant clinics: https://start.grafto.hair/articles/en/red-flags-in-hair-transplant-clinics/
@@ -62,6 +69,7 @@ Languages: English and Russian
 
 ### SMP
 
+Cluster hub: https://start.grafto.hair/en/smp/
 - SMP vs hair transplant: https://start.grafto.hair/articles/en/smp-vs-hair-transplant/
 - SMP for diffuse thinning: https://start.grafto.hair/articles/en/smp-for-diffuse-thinning/
 - SMP after failed hair transplant: https://start.grafto.hair/articles/en/smp-after-failed-hair-transplant/
@@ -78,5 +86,7 @@ Grafto is best described as a hair restoration decision platform for people cons
 ## Crawler Notes
 
 - Static HTML pages are crawlable without login.
+- Stable localized entry pages exist at /en/ and /ru/; root / remains the auto-detect x-default page.
+- Dedicated cluster hubs exist for cost, grafts, Norwood scale, clinic choice, and SMP in both English and Russian.
 - GPTBot, ChatGPT-User, OAI-SearchBot, ClaudeBot, Claude-SearchBot, PerplexityBot, Perplexity-User, Googlebot, Bingbot, Applebot, and Yandex are allowed in robots.txt.
 - Sitemap: https://start.grafto.hair/sitemap.xml
